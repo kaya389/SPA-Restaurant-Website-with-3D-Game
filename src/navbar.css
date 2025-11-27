@@ -1,0 +1,62 @@
+.navbar{
+    width: 100%;
+    height: 80px;
+    z-index: 999;
+    box-shadow: 0 4px 10px rgba(70,142,172,255);
+    height: 80px;
+    color: black;
+    font-family: 'Razor', sans-serif;
+    background-color: #c0c1c5;
+    display: flex;
+
+}
+
+.nav{
+    padding:5px;
+    padding-top: 12px;
+    width: 100%;
+    width: 100%;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 15px;
+}
+
+
+.logo{
+    padding-top: 5px;
+    height: 70px;
+}
+
+.snum{
+    height: 6.25vw;
+    width: auto;
+    flex-shrink: 0;
+}
+
+.link{
+    color: black;
+    text-decoration: none;
+}
+.link:visited{
+    color: black;
+}
+.link:hover{
+    text-decoration: none;
+    color: rgb(233, 94, 7);
+}
+
+.golgelik{
+    position: absolute;
+    right: -250px;
+    top: 0px;
+    z-index: 1;
+    width: 560px;
+}
+
+@media(min-width: 1230px) {
+    .snum{
+        height: 77px;
+    }
+}
