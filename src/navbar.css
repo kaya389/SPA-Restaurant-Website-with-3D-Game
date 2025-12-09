@@ -1,11 +1,12 @@
 .navbar{
+    position: relative;
     width: 100%;
     height: 80px;
     z-index: 999;
     box-shadow: 0 4px 10px rgba(70,142,172,255);
     height: 80px;
     color: black;
-    font-family: 'Razor', sans-serif;
+    font-family: "Science Gothic", sans-serif;
     background-color: #c0c1c5;
     display: flex;
 
@@ -14,13 +15,14 @@
 .nav{
     padding:5px;
     padding-top: 12px;
+    margin-right: 10px;
     width: 100%;
     width: 100%;
     z-index: 999;
     display: flex;
     align-items: center;
     justify-content: space-around;
-    gap: 15px;
+    gap: 10px;
 }
 
 
@@ -49,7 +51,7 @@
 
 .golgelik{
     position: absolute;
-    right: -250px;
+    right: -280px;
     top: 0px;
     z-index: 1;
     width: 560px;

@@ -1,0 +1,120 @@
+.dukkan-div{
+    display: flex;
+    justify-content: right;
+    right: 0;
+    position: relative;
+}
+.dukkan{
+    height: 300px;
+}
+
+.play-button-button{
+    background: none;
+    border: none;
+    position: relative;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+    height: 100px;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.play-button-button:hover{
+    transform: scale(2);
+}
+.play-button-button:active{
+    transform: scale(0.95);
+}
+.play-button-button::before{
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px; /* Butondan 10px daha geniş */
+    
+    border-radius: 50%;
+    border: 4px solid transparent;
+    /* Üst ve Alt kenara renk veriyoruz ki dönerken belli olsun */
+    border-top-color: #ff0055; /* Neon Kırmızı */
+    border-bottom-color: rgb(233, 94, 7);
+    
+    /* Dönme Animasyonu */
+    animation: donmeEfekti 2s linear infinite;
+    z-index: -1; /* Butonun arkasında kalsın */
+}
+.play-button-button::after{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: rgb(233, 94, 7); /* Mavi parıltı */
+    z-index: -2; /* En arkada */
+    
+    /* Nabız Animasyonu */
+    animation: nabizEfekti 2s ease-out infinite;
+}
+@keyframes donmeEfekti {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+@keyframes nabizEfekti {
+    0% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(2); /* 2 katına kadar büyüsün */
+        opacity: 0; /* Büyürken kaybolsun */
+    }
+}
+.play-button{
+    height: 100%;
+}
+.play-button-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+    transform: translateX(240px);
+    position: relative;
+    z-index: 100;
+}
+
+.video-and-buttons{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    gap: 3px;
+}
+
+.start-game, .exit-game{
+    z-index: 999;
+    height: 40px;
+    font-size: 20px;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background: none;
+    color:white;
+    font-weight: bolder;
+    border: none;
+    border-radius: 30%;
+    background-color: rgb(180, 117, 77);
+    transform: translateY(-150px);
+    cursor: pointer;
+}
+.game-start-scene{
+    height: 300px;
+    z-index: 1;
+}
