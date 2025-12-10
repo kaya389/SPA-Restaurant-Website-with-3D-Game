@@ -1,14 +1,18 @@
-import React, { useLayoutEffect, useRef, useMemo } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
 import {useFrame} from '@react-three/fiber';
-import { assetPool } from './asset-pool';
 
-function useObstacleLogic(objectRef, data, laneRef, setGameOver, playerPositionRef, onRemove, id){
+import { assetPool } from './asset-pool';
+import { fbxElements } from './assets';
+
+const rivals = [...fbxElements];
+
+function useObstacleLogic(objectRef, data, laneRef, setGameOver, playerPositionRef){
     const hasCollided = useRef(false);
     const hasBeenRemoved = useRef(false);
 
     /**/useFrame((state, delta)=>{
-        if (!objectRef.current || hasCollided.current || hasBeenRemoved.current) return;
+        if (!objectRef.current || hasBeenRemoved.current) return;
 
         const obj = objectRef.current;
         if(obj.position.y < -500) return;
@@ -31,51 +35,56 @@ function useObstacleLogic(objectRef, data, laneRef, setGameOver, playerPositionR
                     console.log('carp');
                     hasCollided.current = true;
                     setGameOver(true);
+                    if(!hasBeenRemoved.current){
+                        hasBeenRemoved.current = true;
+                        assetPool.release(obj);
+                    }
                 }
             }
         }
         if(obj.position.z > 1.5){
-            if(onRemove && !hasBeenRemoved.current){
+            if(!hasBeenRemoved.current){
                 hasBeenRemoved.current = true;
-                onRemove(id);
+                assetPool.release(obj);
+                //?obj.position.z += GAME_SPEED*delta;
             }
         }
     });/**/
 }
 
-function CreateFBXElement({data, laneRef, setGameOver, playerPositionRef, onRemove}){
+function CreateFBXElement({data, laneRef, setGameOver, playerPositionRef}){
     const objectRef = useRef();
+    const[obj, setObj] = React.useState(null);
     
-    const obj = useMemo(()=>{
+    React.useLayoutEffect(()=>{
         const acquiredObj = assetPool.acquire(data.source);
-        if(!acquiredObj)return null;
-        acquiredObj.visible = true;
-        return acquiredObj;
-    }, [data.source, data.id, data.position]);
-    
-    useLayoutEffect(()=>{
-        if (!obj && onRemove) {
-            onRemove(data.id);
-            return;
+
+        if(!acquiredObj){
+            console.warn("⚠️ Pool dolu veya obje yok:", data.source);
+            return null;
         }
 
         const pos = data.position || [0, 0, 0];
         const rot = data.rotation || [0, 0, 0];
         const scl = data.scale || [1, 1, 1];
 
-        obj.position.set(...pos);
-        obj.rotation.set(...rot);
-        obj.scale.set(...scl);
+        acquiredObj.position.set(...pos);
+        acquiredObj.rotation.set(...rot);
+        acquiredObj.scale.set(...scl);
+        
+        acquiredObj.visible = true;
+        objectRef.current = acquiredObj;
+        setObj(acquiredObj);
 
-        objectRef.current = obj;
         return () => {
-            if (obj) {
-                assetPool.release(obj);
-            }
+            console.log('CreateFBXElement unmount, release ediliyor:', data.id);
+            assetPool.release(acquiredObj);
+            setObj(null);
         };
-    }, [obj, data.position, data.rotation, data.scale, onRemove, data.id]);
+        
+    }, [data.source]);
 
-    useObstacleLogic(objectRef, data, laneRef, setGameOver, playerPositionRef, onRemove, data.id);
+    useObstacleLogic(objectRef, data, laneRef, setGameOver, playerPositionRef, data.id);
 
     if(!obj) return null;
 
@@ -83,16 +92,56 @@ function CreateFBXElement({data, laneRef, setGameOver, playerPositionRef, onRemo
 }
 
 
-export function AssetElement({data, laneRef, setGameOver, playerPositionRef, onRemove}){
+export function AssetElement({data, laneRef, setGameOver, playerPositionRef, onRemove, biggerThen20}){
+    const[dataId, setDataId] = useState(0);
+    const intervalRef = useRef(null);
+
+    useEffect(()=>{
+        if(intervalRef.current){
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        }
+        if(!biggerThen20)return;
+
+        intervalRef.current = setInterval(()=>{
+            setDataId(prevDataId => {
+                return prevDataId + 1;            
+            });
+        }, 2000);
+
+        return () => {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        }
+    }, [biggerThen20])
+
     return(
         <group>
+            {
+            biggerThen20 ? 
+            (
                 <CreateFBXElement 
-                    data={data}
+                    key={`loop-${dataId}`}
+                    data={rivals[dataId % 20]}
                     laneRef={laneRef} 
-                    setGameOver={setGameOver} 
+                    setGameOver={setGameOver}
                     playerPositionRef = {playerPositionRef}
                     onRemove={onRemove}
                 />
+            )
+            :
+            (
+                <CreateFBXElement
+                    key={`init-${data.id}`}
+                    data={data}
+                    laneRef={laneRef} 
+                    setGameOver={setGameOver}
+                    playerPositionRef = {playerPositionRef}
+                    onRemove={onRemove}
+                />   
+            )
+            }
+
         </group>
     );
 }

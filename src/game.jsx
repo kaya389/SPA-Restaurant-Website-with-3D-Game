@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, Suspense, useState} from 'react';
 
-import {Canvas, useFrame} from '@react-three/fiber';
+import {Canvas} from '@react-three/fiber';
 import {useFBX, Environment} from '@react-three/drei';
 import * as THREE from 'three';
 
@@ -27,50 +27,89 @@ toPreload.forEach((path)=>{
 
 useFBX.preload('/cockatrice.fbx');
 
-function RivalManager( {laneRef, setGameOver, playerPositionRef}){
+function GameContent({ setGameOver, setCanDie }) {
+    const laneRef = useRef(1);
+    const jumpTriggerRef = useRef(false);
+    const canMove = useRef(true);
+    const playerPositionRef = useRef(new THREE.Vector3());
 
-    const[spawnedRivals, setSpawnedRivals] = useState([]);
+    useEffect(() => {
+        const deathTimer = setTimeout(() => {
+            setCanDie(true);
+        }, 15000);
 
-    const[poolReady, setPoolReady] = useState(false);
+        const handleKeyDown = (e) => {
+            if (!canMove.current) return;
+            let changed = false;
 
-    const timeRef = useRef(0);
-
-    const MAX_ACTIVE = 3;
-
-    const removeRival = (idToRemove)=>{
-        console.log('Siliniyor:', idToRemove, 'Toplam:', spawnedRivals.length);
-        setSpawnedRivals((prevList)=>{
-            console.log('📊 ÖNCESİ - Array uzunluğu:', prevList.length);
-            console.log('📊 ÖNCESİ - ID\'ler:', prevList.map(r => r.id));
-            const filtered = prevList.filter((rival)=>rival.id !== idToRemove);
-            console.log('✅ SONRASI - Array uzunluğu:', filtered.length);
-            console.log('✅ SONRASI - ID\'ler:', filtered.map(r => r.id));
-            return filtered;
-        })
-    }
-
-    useFrame((state, delta)=>{
-        if(!poolReady) return;
-
-        timeRef.current += delta;
-
-        if(timeRef.current > 1){
-            timeRef.current = 0;
-
-            if(spawnedRivals.length >= 1) return;
-
-            let randomIndex = Math.floor(Math.random() * 21);
-
-            const uniqueId = Date.now() + Math.random();
-
-            const newRival = {
-                ...rivals[randomIndex],
-                id: uniqueId
+            if (e.code === 'Space' || e.key === 'ArrowUp') {
+                jumpTriggerRef.current = true;
+            }
+            if (e.key === 'ArrowLeft' && laneRef.current > 0) {
+                laneRef.current -= 1; changed = true;
+            } else if (e.key === 'ArrowRight' && laneRef.current < 2) {
+                laneRef.current += 1; changed = true;
             }
 
-            setSpawnedRivals((prev)=>[...prev, newRival])
+            if (changed) {
+                canMove.current = false;
+                setTimeout(() => { canMove.current = true; }, 100);
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+            clearTimeout(deathTimer);
+        };
+    }, [setCanDie]);
+    
+    return (
+        <>
+            <Player 
+                laneRef={laneRef} 
+                jumpTriggerRef={jumpTriggerRef}
+                playerPositionRef={playerPositionRef}
+            />
+            <Ground />
+            <RivalManager 
+                laneRef={laneRef} 
+                setGameOver={setGameOver} 
+                playerPositionRef={playerPositionRef}
+            />
+        </>
+    );
+}
+
+function RivalManager( {laneRef, setGameOver, playerPositionRef}){
+
+    const[i, setI] = useState(0);
+    const[poolReady, setPoolReady] = useState(false);
+    const[smallerThen20, setSmallerThen20] = useState(false);
+    const[biggerThen20, setBiggerThen20] = useState(false);
+
+    useEffect(()=>{        
+        if(i > 20){
+            return;
         }
-    });
+
+        const intervalId = setInterval(()=>{
+            setI(prevI => {
+                const nextI = prevI + 1;
+                if(nextI === 20){
+                    setBiggerThen20(true);
+                    setSmallerThen20(true);
+                    clearInterval(intervalId);
+                }
+                else{
+                    setSmallerThen20(true);
+                }
+                return nextI;
+            });
+        }, 2000);
+
+        return () => clearInterval(intervalId);
+
+    }, []);
 
     return(
         <>
@@ -78,80 +117,56 @@ function RivalManager( {laneRef, setGameOver, playerPositionRef}){
             rivals={rivals}
             onReady={()=> setPoolReady(true)}
         />
-        {poolReady && spawnedRivals.map((rival)=>(
-            <AssetElement
-                key={rival.id}
-                data={rival}
-                laneRef={laneRef}
-                setGameOver = {setGameOver}
-                playerPositionRef = {playerPositionRef}
-                onRemove={()=>{removeRival(rival.id)}}
-            />
-        ))}
+        {
+            poolReady && smallerThen20 && (
+                <AssetElement
+                    key = {biggerThen20 ? `loop` : rivals[i].id}
+                    data={rivals[i]}
+                    laneRef={laneRef}
+                    setGameOver = {setGameOver}
+                    playerPositionRef = {playerPositionRef}
+                    biggerThen20 = {biggerThen20}
+                />
+            )
+        }
         </>
     );
 }
 
-export function Game({ onRestart }){
+export function Game(){
     const [showImage, setShowImage] = useState(true);
-    const laneRef = useRef(1);
-
-    const jumpTriggerRef = useRef(false);
     
-    const canMove = useRef(true);
-
     const [canDie, setCanDie] = useState(false);
 
-    const playerPositionRef = useRef(new THREE.Vector3());
-
-    useEffect(()=>{
-        const timerId = setTimeout(() => {
-            setShowImage(false);
-        }, 10000);
-
-        setTimeout(() => {
-            setCanDie(true);
-        }, 15000);
-
-        const handleKeyDown = (e) =>{
-            if (!canMove.current) return;
-
-            let changed = false;
-
-            if(e.code === 'Space' || e.key === 'ArrowUp'){
-                jumpTriggerRef.current = true;
-            }
-            if (e.key === 'ArrowLeft') {
-                if (laneRef.current > 0) {
-                    laneRef.current -= 1;
-                    changed = true;
-                }
-            }else if (e.key === 'ArrowRight') {
-                if (laneRef.current < 2) {
-                    laneRef.current += 1;
-                    changed = true;
-                }
-            }
-
-            if(changed){
-                canMove.current = false;
-
-                setTimeout(()=>{
-                    canMove.current = true;
-                }, 100);
-            }
-        };
-        window.addEventListener('keydown', handleKeyDown);
-        return ()=>{
-            window.removeEventListener('keydown', handleKeyDown);
-            return () => clearTimeout(timerId);
-        };
-    }, []);
+    const [restartKey, setRestartKey] = useState(0);
 
     const [gameOver, setGameOver] = useState(false);
 
-    if (gameOver && canDie) {
-        return (
+    const handleRestart = ()=>{
+        setGameOver(false);
+        setCanDie(false);
+        setShowImage(false);
+        setRestartKey(prev => prev + 1);
+    }
+
+    useEffect(() => {
+        const timer = setTimeout(() => setShowImage(true), 10000);
+        return () => clearTimeout(timer);
+    }, []);
+
+    
+
+    return(
+        <div className="game-main-screen" style={{ height: "370px", width:'240px',
+            background: "black", position: 'fixed', right: '0', transform:'translateY(0px)'
+         }}>
+        {showImage && (
+            <img src={dialogBox}
+            style={{
+                position: 'absolute', top: '0px', height: '200px', right: '90px', zIndex: 2000
+            }}
+            />)}
+        {gameOver && canDie && (
             <div style={{
                 position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
                 background: 'rgba(0,0,0,0.8)', color: 'white',
@@ -160,24 +175,13 @@ export function Game({ onRestart }){
             }}>
                 <h1>OYUN BİTTİ!</h1>
                 <button 
-                    onClick={onRestart} 
+                    onClick={handleRestart} 
                     style={{ padding: '20px', fontSize: '20px', cursor: 'pointer' }}
                 >
                     Tekrar Dene
                 </button>
             </div>
-        );
-    }
-    return(
-        <div className="game-main-screen" style={{ height: "370px", width:'240px',
-            background: "black", position: 'fixed', right: '0', transform:'translateY(0px)'
-         }}>
-            {showImage && (
-                <img src={dialogBox}
-                style={{
-                    position: 'absolute', top: '0px', height: '200px', right: '90px', zIndex: 2000
-                }}
-                />)}
+        )}
             <Canvas camera = {{position: [0, 3, 5], fov:60}}>
                 <ambientLight intensity={1}/>
                 <directionalLight position={[10, 10, 5]} intensity={1.5}/>
@@ -191,18 +195,10 @@ export function Game({ onRestart }){
                 
 
                 <Suspense fallback={null}>
-                    <Player 
-                        laneRef={laneRef} 
-                        jumpTriggerRef={jumpTriggerRef}
-                        playerPositionRef = {playerPositionRef}
-                    />
-                    <Ground /> 
-                </Suspense>
-                <Suspense fallback={null}>
-                    <RivalManager 
-                        laneRef={laneRef} 
+                    <GameContent
+                        key={restartKey}
                         setGameOver={setGameOver}
-                        playerPositionRef = {playerPositionRef}
+                        setCanDie={setCanDie}
                     />
                 </Suspense>
             </Canvas>

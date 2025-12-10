@@ -24,9 +24,9 @@ export function AssetLoader({rivals, onReady}){
 
     return (
         <>
-            {rivals.map((r, index) => (
+            {rivals.slice(0, 20).map((r) => (
                 <PreloadAsset 
-                    key={index} 
+                    key={r.id}
                     source={r.source} 
                     texture={r.texture} 
                 />

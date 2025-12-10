@@ -10,16 +10,9 @@ export function AnaSayfa(){
     const [gameStart, setGameStart] = useState(false);
     const [openButton, setOpenButton] = useState(false);
     const [gameModActive, setGameModActive] = useState(false);
-    let x = 0;
-    const [gameId, setGameId] = useState(x);
-
-    function restartGame(){
-        setGameId(x++);
-        console.log(gameId);
-    }
 
     if(gameModActive){
-        return <Game key={gameId} onRestart={restartGame}/>
+        return <Game/>
     }
 
     return(

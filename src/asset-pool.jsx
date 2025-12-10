@@ -17,33 +17,32 @@ class AssetPool{
         return this.materials[key];
     }
 
-    preparePool(source, fbx, texture, poolSize){
+    preparePool(source, fbx, texture){
         if(this.pools[source]) return;
 
         this.pools[source] = [];
         const material = this.getMaterial(texture);
 
-        for(let i = 0; i < poolSize; i++){
-            const clone = SkeletonUtils.clone(fbx);
+        const clone = SkeletonUtils.clone(fbx);
 
-            clone.traverse((child) => {
-                if (child.isMesh) {
-                    child.material = material;
-                    child.castShadow = true;
-                    child.receiveShadow = true;
-                }
-            });
+        clone.traverse((child) => {
+            if (child.isMesh) {
+                child.material = material;
+                child.castShadow = true;
+                child.receiveShadow = true;
+            }
+        });
 
-            clone.userData = {
-                inUse: false,
-                poolSource: source
-            };
+        clone.userData = {
+            inUse: false,
+            poolSource: source
+        };
 
-            clone.position.set(0, -1000, 0);
-            this.pools[source].push(clone);
-        }
-        console.log(`✅ Pool hazır: ${source} (${poolSize} adet)`);
+        clone.position.set(0, -1000, 0);
+        this.pools[source].push(clone);
+        console.log(`✅ Pool hazır: ${source}`);
     }
+
     acquire(source){
         const pool = this.pools[source];
         if(!pool) return null;
@@ -56,12 +55,15 @@ class AssetPool{
         console.warn(`⚠️ Pool dolu: ${source}`);
         return null;
     }
+
     release(object){
         if(!object || !object.userData) return;
 
         object.userData.inUse = false;
-        object.position.set(0, -1000, 0)
+        object.position.set(0, 0, -505)
+        
     }
+    
     dispose(){
         Object.values(this.pools).forEach(pool=>{
             pool.forEach(obj=>{
