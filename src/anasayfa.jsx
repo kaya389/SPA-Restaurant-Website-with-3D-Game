@@ -12,7 +12,7 @@ export function AnaSayfa(){
     const [gameModActive, setGameModActive] = useState(false);
 
     if(gameModActive){
-        return <Game/>
+        return <Game />
     }
 
     return(

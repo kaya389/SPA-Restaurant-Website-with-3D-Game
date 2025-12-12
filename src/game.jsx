@@ -27,7 +27,7 @@ toPreload.forEach((path)=>{
 
 useFBX.preload('/cockatrice.fbx');
 
-function GameContent({ setGameOver, setCanDie }) {
+function GameContent({ setGameOver, setCanDie, setHearts }) {
     const laneRef = useRef(1);
     const jumpTriggerRef = useRef(false);
     const canMove = useRef(true);
@@ -75,12 +75,13 @@ function GameContent({ setGameOver, setCanDie }) {
                 laneRef={laneRef} 
                 setGameOver={setGameOver} 
                 playerPositionRef={playerPositionRef}
+                setHearts={setHearts}
             />
         </>
     );
 }
 
-function RivalManager( {laneRef, setGameOver, playerPositionRef}){
+function RivalManager( {laneRef, setGameOver, playerPositionRef, setHearts}){
 
     const[i, setI] = useState(0);
     const[poolReady, setPoolReady] = useState(false);
@@ -126,6 +127,7 @@ function RivalManager( {laneRef, setGameOver, playerPositionRef}){
                     setGameOver = {setGameOver}
                     playerPositionRef = {playerPositionRef}
                     biggerThen20 = {biggerThen20}
+                    setHearts = {setHearts}
                 />
             )
         }
@@ -134,15 +136,21 @@ function RivalManager( {laneRef, setGameOver, playerPositionRef}){
 }
 
 export function Game(){
+    const audioRef = useRef(null);
+
+    const[hearts, setHearts] = useState(3);
+
     const [showImage, setShowImage] = useState(true);
     
     const [canDie, setCanDie] = useState(false);
+    console.log(canDie);
 
     const [restartKey, setRestartKey] = useState(0);
 
     const [gameOver, setGameOver] = useState(false);
 
     const handleRestart = ()=>{
+        setHearts(3);
         setGameOver(false);
         setCanDie(false);
         setShowImage(false);
@@ -150,8 +158,54 @@ export function Game(){
     }
 
     useEffect(() => {
-        const timer = setTimeout(() => setShowImage(true), 10000);
+        const timer = setTimeout(() => {
+            setShowImage(false)
+        }, 10000);
         return () => clearTimeout(timer);
+    }, []);
+
+    useEffect(()=>{
+        if(hearts<=0 && !gameOver){
+            setTimeout(() => {
+                setGameOver(true);
+            }, 0);
+        }
+    }, [hearts, gameOver]);
+
+    useEffect(()=>{
+        if (!audioRef.current) {
+            audioRef.current = new Audio('/music.mp3');
+            audioRef.current.loop = true;
+            audioRef.current.volume = 0.3;
+        }
+
+        const playMusic = () => {
+            if (audioRef.current) {
+                audioRef.current.play()
+                    .then(() => {
+                        console.log("🎵 Müzik Başladı!");
+                        window.removeEventListener('click', playMusic);
+                        window.removeEventListener('keydown', playMusic);
+                    })
+                    .catch((err) => {
+                        console.log("⏳ Bekleniyor... Tarayıcı izin vermedi.");
+                    });
+            }
+        };
+
+        playMusic();
+
+        window.addEventListener('keydown', playMusic);
+        window.addEventListener('click', playMusic);
+
+        return () => {
+            if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current.currentTime = 0;
+            }
+            window.removeEventListener('keydown', playMusic);
+            window.removeEventListener('click', playMusic);
+        };
     }, []);
 
     
@@ -159,14 +213,20 @@ export function Game(){
     return(
         <div className="game-main-screen" style={{ height: "370px", width:'240px',
             background: "black", position: 'fixed', right: '0', transform:'translateY(0px)'
-         }}>
+         }}><span className='heart'>
+        {Array.from({length: hearts}).map((_, index)=>(
+            <span key={index}>&#129505;</span>
+        ))}</span>
         {showImage && (
+            <>
             <img src={dialogBox}
             style={{
                 position: 'absolute', top: '0px', height: '200px', right: '90px', zIndex: 2000
             }}
-            />)}
-        {gameOver && canDie && (
+            />
+            </>
+            )}
+        {gameOver && hearts === 0 && (
             <div style={{
                 position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
                 background: 'rgba(0,0,0,0.8)', color: 'white',
@@ -185,7 +245,6 @@ export function Game(){
             <Canvas camera = {{position: [0, 3, 5], fov:60}}>
                 <ambientLight intensity={1}/>
                 <directionalLight position={[10, 10, 5]} intensity={1.5}/>
-
                 <Environment
                     files="/city.exr"
                     background
@@ -199,6 +258,7 @@ export function Game(){
                         key={restartKey}
                         setGameOver={setGameOver}
                         setCanDie={setCanDie}
+                        setHearts={setHearts}
                     />
                 </Suspense>
             </Canvas>

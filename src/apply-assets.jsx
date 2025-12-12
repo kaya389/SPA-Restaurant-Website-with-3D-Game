@@ -7,7 +7,7 @@ import { fbxElements } from './assets';
 
 const rivals = [...fbxElements];
 
-function useObstacleLogic(objectRef, data, laneRef, setGameOver, playerPositionRef){
+function useObstacleLogic(objectRef, data, laneRef, setGameOver, playerPositionRef, setHearts){
     const hasCollided = useRef(false);
     const hasBeenRemoved = useRef(false);
 
@@ -18,7 +18,7 @@ function useObstacleLogic(objectRef, data, laneRef, setGameOver, playerPositionR
         if(obj.position.y < -500) return;
 
         const time = state.clock.elapsedTime; 
-        const GAME_SPEED = Math.min((time*100), 100);
+        const GAME_SPEED = Math.min((time*100), 200);
         objectRef.current.position.z += GAME_SPEED * delta;
 
         if(time>15){
@@ -31,13 +31,31 @@ function useObstacleLogic(objectRef, data, laneRef, setGameOver, playerPositionR
                 const obstacleY = objectRef.current.position.y;
                 const yDistance = Math.abs(playerY-obstacleY);
 
-                if( xDistance < 0.5 && yDistance < 0.5){
-                    console.log('carp');
-                    hasCollided.current = true;
-                    setGameOver(true);
-                    if(!hasBeenRemoved.current){
-                        hasBeenRemoved.current = true;
-                        assetPool.release(obj);
+                if( xDistance < 1 && yDistance < 1){
+                    if(data.id < 20){
+                        setHearts(prevHearts=>{
+                            const newHearts = prevHearts-1;
+                            if(newHearts <= 0){
+                                setGameOver(true);
+                                return 0;
+                            }
+                            return newHearts;
+                        });
+                        console.log('carp');
+                        hasCollided.current = true;
+                        if(!hasBeenRemoved.current){
+                            hasBeenRemoved.current = true;
+                            assetPool.release(obj);
+                        }
+                    }else{
+                        setHearts(prevHearts=>{
+                            const newHearts = prevHearts+1;
+                            return newHearts;
+                        });
+                        if(!hasBeenRemoved.current){
+                            hasBeenRemoved.current = true;
+                            assetPool.release(obj);
+                        }
                     }
                 }
             }
@@ -52,7 +70,7 @@ function useObstacleLogic(objectRef, data, laneRef, setGameOver, playerPositionR
     });/**/
 }
 
-function CreateFBXElement({data, laneRef, setGameOver, playerPositionRef}){
+function CreateFBXElement({data, laneRef, setGameOver, playerPositionRef, setHearts}){
     const objectRef = useRef();
     const[obj, setObj] = React.useState(null);
     
@@ -84,7 +102,7 @@ function CreateFBXElement({data, laneRef, setGameOver, playerPositionRef}){
         
     }, [data.source]);
 
-    useObstacleLogic(objectRef, data, laneRef, setGameOver, playerPositionRef, data.id);
+    useObstacleLogic(objectRef, data, laneRef, setGameOver, playerPositionRef, setHearts);
 
     if(!obj) return null;
 
@@ -92,15 +110,24 @@ function CreateFBXElement({data, laneRef, setGameOver, playerPositionRef}){
 }
 
 
-export function AssetElement({data, laneRef, setGameOver, playerPositionRef, onRemove, biggerThen20}){
+export function AssetElement({data, laneRef, setGameOver, playerPositionRef, onRemove, biggerThen20, setHearts}){
     const[dataId, setDataId] = useState(0);
     const intervalRef = useRef(null);
+    const[notRival, setNotRival] = useState(1);
 
     useEffect(()=>{
+        const interval = setInterval(()=>{
+            setNotRival( prevNotRival =>{
+                prevNotRival;
+                return Math.floor(Math.random() * 4) + 1;
+            });
+        }, 8000);
+
         if(intervalRef.current){
             clearInterval(intervalRef.current);
             intervalRef.current = null;
         }
+        
         if(!biggerThen20)return;
 
         intervalRef.current = setInterval(()=>{
@@ -111,15 +138,23 @@ export function AssetElement({data, laneRef, setGameOver, playerPositionRef, onR
 
         return () => {
             clearInterval(intervalRef.current);
+            clearInterval(interval);
             intervalRef.current = null;
         }
-    }, [biggerThen20])
+    }, [biggerThen20, notRival]);
+
+    useEffect(()=>{
+        console.log(notRival);
+
+    }, [notRival]);
 
     return(
         <group>
             {
-            biggerThen20 ? 
-            (
+            biggerThen20 ?
+            (   
+                dataId % 4 === 0 ? (
+                <>
                 <CreateFBXElement 
                     key={`loop-${dataId}`}
                     data={rivals[dataId % 20]}
@@ -127,10 +162,37 @@ export function AssetElement({data, laneRef, setGameOver, playerPositionRef, onR
                     setGameOver={setGameOver}
                     playerPositionRef = {playerPositionRef}
                     onRemove={onRemove}
+                    setHearts={setHearts}
                 />
+                <CreateFBXElement 
+                    key={`loop-notRival-${20+(notRival)}`}
+                    data={rivals[20+(notRival)]}
+                    laneRef={laneRef} 
+                    setGameOver={setGameOver}
+                    playerPositionRef = {playerPositionRef}
+                    onRemove={onRemove}
+                    setHearts={setHearts}
+                />
+                </>
+                )
+                :
+                (
+                <CreateFBXElement 
+                    key={`loop-${dataId}`}
+                    data={rivals[dataId % 20]}
+                    laneRef={laneRef} 
+                    setGameOver={setGameOver}
+                    playerPositionRef = {playerPositionRef}
+                    onRemove={onRemove}
+                    setHearts={setHearts}
+                />
+                )
             )
             :
-            (
+            (   
+                dataId % 4 === 0 ?
+                (
+                <>
                 <CreateFBXElement
                     key={`init-${data.id}`}
                     data={data}
@@ -138,7 +200,23 @@ export function AssetElement({data, laneRef, setGameOver, playerPositionRef, onR
                     setGameOver={setGameOver}
                     playerPositionRef = {playerPositionRef}
                     onRemove={onRemove}
-                />   
+                    setHearts={setHearts}
+                />
+                
+                </>
+                )
+                :
+                (
+                <CreateFBXElement
+                    key={`init-${data.id}`}
+                    data={data}
+                    laneRef={laneRef} 
+                    setGameOver={setGameOver}
+                    playerPositionRef = {playerPositionRef}
+                    onRemove={onRemove}
+                    setHearts={setHearts}
+                />
+                )
             )
             }
 
