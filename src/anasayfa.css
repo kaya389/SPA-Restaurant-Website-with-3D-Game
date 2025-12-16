@@ -1,8 +1,12 @@
+.anasayfa{
+    display: flex;
+    flex-direction: column;
+}
 .dukkan-div{
     display: flex;
     justify-content: right;
-    right: 0;
     position: relative;
+    right: 0;
 }
 .dukkan{
     height: 300px;
@@ -117,4 +121,27 @@
 .game-start-scene{
     height: 300px;
     z-index: 1;
+}
+/**/
+.welcome-dukkan{
+    display: flex;
+    right: 0;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0;
+    background-color: rgb(235, 188, 159);
+}
+.welcome{
+    width: 100%;
+    cursor: pointer;
+    left: 0;
+}
+/**/
+.tanitim{
+    display: flex;
+    width: 100%;
+    background-color: rgb(201, 239, 255);
+    height: 300px;
+    cursor: pointer;
 }
