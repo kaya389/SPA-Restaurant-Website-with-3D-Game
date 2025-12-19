@@ -1,8 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Game } from './game';
 import dukkan from '../images/dukkan.png'
+import kaldirim from '../images/kaldırım-back.png'
 import playButton from '../images/play-button.png';
 import intro from '../images/game-start-scene.mp4';
+import lamba from '../images/lamba.png'
+import e_poster1 from '../images/e_poster.png';
+import e_poster2 from '../images/e_poster2.png';
+import e_poster3 from '../images/e_poster3.png';
+import e_poster4 from '../images/e_poster4.png';
+import e_poster5 from '../images/e_poster2.png';
+import koltuk from '../images/koltuk.png';
+import qr_platform from '../images/qr-platform.png';
+import beni_oku from '../images/beni-oku.png';
 import './anasayfa.css';
 import { assetPool } from './game/asset-pool';
 
@@ -11,7 +21,8 @@ export function AnaSayfa({gameModActive, setGameModActive,
     const [positionChange, setPositionChange] = useState(false);
     const [gameStart, setGameStart] = useState(false);
     const [openButton, setOpenButton] = useState(false);
-    
+    const [beniOku, setBeniOku] = useState(false);
+
     useEffect(()=>{
             if(!gameModActive){
                 const timer = setTimeout(()=>{
@@ -22,6 +33,42 @@ export function AnaSayfa({gameModActive, setGameModActive,
             }
     }, [gameModActive, gStart]);
 
+    const [ePoster, setEPoster] = useState(e_poster5);
+    const [i, setI] = useState(1);
+    
+
+    useEffect(() => {
+
+        const timer = setInterval(() => {
+            
+            setI(prevI => {
+                let nextI = prevI + 1;
+
+                switch(prevI) {
+                    case 1:
+                        setEPoster(e_poster1);
+                        break;
+                    case 2:
+                        setEPoster(e_poster2);
+                        break;
+                    case 3:
+                        setEPoster(e_poster3);
+                        break;
+                    case 4:
+                        setEPoster(e_poster4);
+                        break;
+                    case 5:
+                        setEPoster(e_poster5);
+                        break;
+                }
+                
+                return nextI > 5 ? 1 : nextI;
+            });
+        }, 10000);
+
+        return () => clearInterval(timer);
+    }, []);
+
     
 
     return(
@@ -30,7 +77,8 @@ export function AnaSayfa({gameModActive, setGameModActive,
         <div className='anasayfa'>
             <div className='welcome-dukkan'>
                 <div className='welcome'>
-                    
+                    <img className='e-poster' src={ePoster}/>
+                    <img className='lamba' src={lamba}/>
                 </div>
                 <div className='dukkan-div'
                     style={{
@@ -51,14 +99,15 @@ export function AnaSayfa({gameModActive, setGameModActive,
                                 
                             }}
                             style={{
-                                display: positionChange ? 'none' : 'flex'
+                                display: positionChange ? 'none' : 'flex',
+                                pointerEvents: 'auto'
                             }}
                         >
-                            <img 
-                                onClick={()=>{
-                                    
-                                }}
-                                className='play-button' src={playButton}>
+                            <img
+                                className='play-button' 
+                                src={playButton}
+                                style={{pointerEvents: 'none'}}
+                                >
                             </img>
                         </button>
                     </div>
@@ -68,10 +117,7 @@ export function AnaSayfa({gameModActive, setGameModActive,
                                 className='game-start-scene'
                                 src={intro}
                                 autoPlay
-                                style={{
-                                    transform: 'scale(1.2) translateY(20px)',
-                                    transition: 'transform 0.5s ease-in-out'
-                                }}
+                                
                             />{openButton?(
                             <>
                             <button 
@@ -98,17 +144,35 @@ export function AnaSayfa({gameModActive, setGameModActive,
                     <img 
                         className="dukkan" 
                         src={dukkan}
-                        style={{
-                            transition: 'transform 0.5s ease-in-out',
-                            transform: positionChange ? `scale(1.2) translateY(20px)` : 
-                                'translateY(0) scale(1)',
-                        }}
                     />
                     )}
                 </div>
             </div>
             <div className='tanitim'>
-
+                <img className='kaldirim' src={kaldirim}/>
+                <img className='koltuk' src={koltuk}/>
+                <button
+                    className='qr-button'
+                    onClick={()=>{
+                        if(beniOku)return;
+                        setBeniOku(true);
+                    }}
+                >
+                    <img className='qr-platform' src={qr_platform}/>
+                </button>
+                {beniOku &&(
+                    <>
+                    <button className='cik'
+                        onClick={()=>{
+                            setBeniOku(false);
+                            console.log('a');
+                        }}
+                    >
+                        ❌
+                    </button>
+                    <img className='beni-oku' src={beni_oku}/>
+                    </>
+                )}
             </div>
         </div>
         )}

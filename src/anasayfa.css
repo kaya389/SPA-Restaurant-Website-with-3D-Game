@@ -1,24 +1,32 @@
 .anasayfa{
     display: flex;
     flex-direction: column;
+    
 }
 .dukkan-div{
+    z-index: 2;
     display: flex;
     justify-content: right;
     position: relative;
     right: 0;
-}
-.dukkan{
+    left: 0;
     height: 300px;
+    width: 240px;
+}
+.dukkan, .game-start-scene{
+    height: 300px;
+    width: 230px;
+    right: 0;
 }
 
 .play-button-button{
+    position: relative;
+    pointer-events: auto;
     background: none;
     border: none;
-    position: relative;
     border-radius: 50%;
     cursor: pointer;
-    z-index: 10;
+    z-index: 11;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease;
     height: 100px;
@@ -93,7 +101,8 @@
     padding: 50px;
     transform: translateX(240px);
     position: relative;
-    z-index: 100;
+    z-index: 1;
+    pointer-events: auto;
 }
 
 .video-and-buttons{
@@ -102,6 +111,7 @@
     align-items: center;
     position: relative;
     gap: 3px;
+    pointer-events: auto;
 }
 
 .start-game, .exit-game{
@@ -118,10 +128,13 @@
     transform: translateY(-150px);
     cursor: pointer;
 }
-.game-start-scene{
+/*.game-start-scene{
+    padding-bottom: 0;
+    margin-bottom: 0;
     height: 300px;
     z-index: 1;
-}
+    bottom: 0;
+}*/
 /**/
 .welcome-dukkan{
     display: flex;
@@ -130,18 +143,174 @@
     flex-direction: row;
     justify-content: space-between;
     gap: 0;
-    background-color: rgb(235, 188, 159);
+    bottom: 0;
+    height: 300px;
+    background-image: url('../images/duvar.png');
 }
 .welcome{
     width: 100%;
     cursor: pointer;
     left: 0;
+    display: flex;
+    justify-content: right;
+    align-items: end;
+}
+.lamba{
+    height: 200px;
+    z-index: 1;
+    position: absolute;
+}
+.e-poster{
+    height: 290px;
+    z-index: 1;
+    transform: translateX(15px);
+}
+@media (min-height: 740px){
+    .e-poster{
+        height: 270px;
+        transform: translateX(0px);
+    }
+}
+@media(min-height: 844px){
+    .e-poster{
+        height: 300px;
+        transform: translateX(0px);
+    }
 }
 /**/
 .tanitim{
+    top: 0;
     display: flex;
+    flex-direction: row;
     width: 100%;
-    background-color: rgb(201, 239, 255);
     height: 300px;
     cursor: pointer;
+    bottom: 0;
+    justify-content: flex-end;
+    pointer-events: none;
+}
+.kaldirim{
+    width: 100%;
+    height: 400px;
+    z-index: -1;
+    position: absolute;
+    pointer-events: none;
+}
+@media (min-height: 700px){
+    .kaldirim{
+        height: 556px;
+    }
+}
+.koltuk{
+    background-color: none;
+    z-index: 1;
+    pointer-events: none;
+}
+@media(min-height: 1000px){
+    .kaldirim{
+        height: 650px;
+    }
+    .koltuk{
+        transform: translateY(100px);
+        height: 370px;
+    }
+    .e-poster{
+    height: 450px;
+    z-index: 1;
+    transform: translateX(-200px);
+    transform: translateY(200px);
+    padding-right: 200px;
+    }
+}
+@media(min-height: 1100px){
+    .kaldirim{
+        height: 800px;
+    }
+    .koltuk{
+        height: 500px;
+    }
+}
+@media(min-height: 1200px){
+    .kaldirim{
+        height: 1000px;
+    }
+    .koltuk{
+        height: 500px;
+    }
+    .e-poster{
+    height: 600px;
+    z-index: 1;
+    transform: translateX(-200px);
+    transform: translateY(400px);
+    padding-right: 350px;
+    }
+}
+
+.qr-button{
+    height: 100px;
+    width: 70px;
+    z-index: 11;
+    cursor: pointer;
+    background: none;
+    position: absolute;
+    cursor: pointer;
+    pointer-events: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    right: 170px;
+    transform: translateY(20px);
+    transition: border 0.2s ease;
+}
+.qr-platform{
+    height: 100px;
+    z-index: 11;
+    cursor: pointer;
+}
+.qr-button:hover{
+    border: 10px solid rgb(191, 161, 52);
+    border-radius: 10px;
+}
+@media (min-height: 1000px){
+    .qr-button, .qr-platform{
+        height: 200px;
+        width: 140px;
+        transform: translateY(-3px);
+        transform: translateX(-10px)
+    }
+    .qr-button:hover{
+        border: 50px solid rgb(191, 161, 52);
+        border-radius: 50px;
+    }
+}
+@media (min-height: 1100px){
+    .qr-button, .qr-platform{
+        height: 200px;
+        width: 140px;
+        transform: translateY(50px);
+        right: 250px;
+    }
+    .qr-button:hover{
+        border: 50px solid rgb(191, 161, 52);
+        border-radius: 50px;
+    }
+}
+.beni-oku{
+    bottom: 0;
+    position: absolute;
+    z-index: 12;
+    height: 300px;
+    width: 410px;
+    right: 0px;
+}
+.cik{
+    right: 0;
+    position: absolute;
+    z-index: 13;
+    background: none;
+    border: none;
+    cursor: pointer;
+    pointer-events: auto;
+    padding-top: 60px;
 }

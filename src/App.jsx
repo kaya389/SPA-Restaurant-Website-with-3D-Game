@@ -3,6 +3,7 @@ import { NavBar } from './navbar';
 import { AnaSayfa } from './anasayfa.jsx';
 import {Menu} from './menu.jsx';
 import {Game} from './game.jsx'
+import {TwoBirds} from './2birds.jsx';
 import './App.css';
 import { useState, useEffect } from 'react';
 
@@ -32,6 +33,7 @@ function App() {
   return (
     <>
       <NavBar />
+      <TwoBirds />
       <Game 
         isActive={gameModActive} 
         handleExitGame={handleExitGame}

@@ -246,7 +246,7 @@ export function Game({isActive, handleExitGame}){
         <div className="game-main-screen" style={{ height: "100%", width:'100%',
             background: "black", position: 'fixed', right: '0', transform:'translateY(0px)',
             visibility: isActive ? "visible" : "hidden", 
-            pointerEvents: isActive ? "auto" : "none"
+            pointerEvents: isActive ? "auto" : "none", zIndex: 10000
          }}>
 
             {/*exit button*/}
