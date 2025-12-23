@@ -1,39 +1,42 @@
+import { useState, useEffect, Suspense } from 'react';
 import {Routes, Route, useLocation} from 'react-router-dom';
+
 import { NavBar } from './navbar';
 import { AnaSayfa } from './anasayfa.jsx';
 import {Menu} from './menu.jsx';
 import {Game} from './game.jsx'
 import {TwoBirds} from './2birds.jsx';
 import './App.css';
-import { useState, useEffect } from 'react';
 
 function App() {
   const [gameModActive, setGameModActive] = useState(false);
   const [gameStart, setGameStart] = useState(false);
   const [positionChange, setPositionChange] = useState(false);
   const [openButton, setOpenButton] = useState(false);
+  const [videoEnded, setVideoEnded] = useState(false);
+
   const location = useLocation();
 
   const handleExitGame = () => {
     setGameModActive(false);
-            setTimeout(()=>{
-                setGameModActive(false);
-                setGameStart(false);
-                setPositionChange(false);
-                setOpenButton(false);
-            }, 50);
+    setTimeout(()=>{
+        setGameModActive(false);
+        setGameStart(false);
+        setPositionChange(false);
+        setOpenButton(false);
+    }, 50);
   }
 
   useEffect(()=>{
-    return()=>{
-      handleExitGame();
-    }
+      return()=>{
+        handleExitGame();
+      }
   }, [location.pathname]);
   
   return (
     <>
       <NavBar />
-      <TwoBirds />
+      <TwoBirds route={location.pathname}/>
       <Game 
         isActive={gameModActive} 
         handleExitGame={handleExitGame}
@@ -58,7 +61,11 @@ function App() {
             pChange = {positionChange}
             oButton = {openButton}
           />}/>
-        <Route path="/menu" element={<Menu/>}/>
+        <Route path="/menu" element={
+          <Menu 
+            setVideoEnded={setVideoEnded} 
+            videoEnded={videoEnded}/>
+        }/>
       </Routes>
     </>
   )

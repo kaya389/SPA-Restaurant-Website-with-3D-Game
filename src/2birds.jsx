@@ -30,6 +30,7 @@ function SingleBird({ source, texturePath, scale, speed, offset }) {
 
     },[]);
 
+
     useFrame((state) => {
         if (!meshRef.current) return;
         const time = state.clock.getElapsedTime();
@@ -73,7 +74,7 @@ export function TwoBirds() {
                 position: 'fixed', top: 0, left: 0, 
                 width: '100%', height: '100%', 
                 pointerEvents: 'auto',
-                zIndex: 2 
+                zIndex: 14
             }}
         >
             <ambientLight intensity={1.2} />

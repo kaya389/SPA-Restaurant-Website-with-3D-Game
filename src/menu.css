@@ -1,0 +1,60 @@
+.menu-start-scene{
+    height: 680px;
+    width: 550px;
+    position: absolute;
+    right: -15px;
+    bottom: -30px;
+    background-color: black;
+    border: none;
+}
+.menu{
+    background-color: black;
+    height: 680px;
+    width: 550px;
+    background-image: url('../images/mutfak-mermer.jpg');
+}
+.white-desk{
+    position: absolute;
+    bottom: -150px;
+    width: 900px;
+    right: -200px;
+    height: 500px;
+    z-index: 13;
+}
+.desk-bottom{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 11;
+    width: 950px;
+}
+.desk-behind{
+    position: absolute;
+    right: 0;
+    bottom: 70px;
+    width: 1000px;
+    transform: rotateZ(-2deg);
+    height: 70px;
+    z-index: 12;
+}
+.menu-{
+    position: absolute;
+    right: -40px;
+    background: none;
+    background-image: url('../images/mutfak-mermer.jpg');
+}
+.naile-apla{
+    position: absolute;
+    height: 300px;
+    width: 249.087591241px;
+    top: 160px;
+    right: 140px;
+    z-index: 99;
+}
+.mouth{
+    position: absolute;
+    top: 270px;
+    right: 255px;
+    z-index: 100;
+    height: 11px;
+}

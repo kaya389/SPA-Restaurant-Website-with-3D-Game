@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Game } from './game';
+
 import dukkan from '../images/dukkan.png'
 import kaldirim from '../images/kaldırım-back.png'
 import playButton from '../images/play-button.png';
@@ -13,7 +13,9 @@ import e_poster5 from '../images/e_poster2.png';
 import koltuk from '../images/koltuk.png';
 import qr_platform from '../images/qr-platform.png';
 import beni_oku from '../images/beni-oku.png';
+
 import './anasayfa.css';
+
 import { assetPool } from './game/asset-pool';
 
 export function AnaSayfa({gameModActive, setGameModActive,
