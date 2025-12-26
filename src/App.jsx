@@ -1,4 +1,4 @@
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, Suspense, useRef} from 'react';
 import {Routes, Route, useLocation} from 'react-router-dom';
 
 import { NavBar } from './navbar';
@@ -14,6 +14,7 @@ function App() {
   const [positionChange, setPositionChange] = useState(false);
   const [openButton, setOpenButton] = useState(false);
   const [videoEnded, setVideoEnded] = useState(false);
+  const audioRef = useRef(null);
 
   const location = useLocation();
 
@@ -28,7 +29,25 @@ function App() {
   }
 
   useEffect(()=>{
+      if(location.pathname === '/menu'){
+        audioRef.current = new Audio('/cornered.mp3');
+        audioRef.current.loop = true;
+        audioRef.current.volume = 0.3;
+
+        const playPromise = audioRef.current.play();
+
+        if (playPromise !== undefined) {
+            playPromise.catch((error) => {
+              console.log("Tarayıcı otomatik oynatmayı engelledi:", error);
+              // Burada belki ekrana "Sesi açmak için tıkla" butonu koyabilirsin
+            });
+        }
+      }
       return()=>{
+        if(audioRef.current){
+          audioRef.current.pause();
+          audioRef.current.currentTime = 0;
+        }
         handleExitGame();
       }
   }, [location.pathname]);

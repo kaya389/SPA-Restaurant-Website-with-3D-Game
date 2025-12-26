@@ -1,0 +1,352 @@
+@font-face {
+  font-family: PixelText;
+  src: url(https://assets.codepen.io/36869/Grand9KPixel.ttf);
+}
+
+:root {
+  font-family: 'PixelText', serif;
+  font-optical-sizing: auto;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+
+  /* sprite image */
+  --sprite-image: url(https://assets.codepen.io/36869/book.webp);
+
+  /* sprite animation settings */
+  /* animation duration */
+  --sprite-as: .8s;
+  /* animation direction */
+  --sprite-ad: normal;
+  /* animation fill mode */
+  --sprite-af: none;
+  /* animation play state */
+  --sprite-ap: running;
+  /* animation iteration count */
+  --sprite-ai: infinite;
+  /* animation timing function */
+  --sprite-at: linear;
+  /* animation frame rate */
+  --sprite-fr: 12;
+}
+
+@layer base {
+  *{
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    height: 100px;
+    width: 100px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 1rem;
+  }
+
+  .sprite-wrapper {
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+    z-index: 200;
+  }
+}
+
+@layer main {
+  /* Frame start position */
+  @property --sprite-fs {
+    syntax: "<integer>";
+    initial-value: 0;
+    inherits: true
+  }
+  @property --_progress {
+    syntax: "<percentage>";
+    inherits: false;
+    initial-value: 0%;
+  }
+
+  .container {
+    transform: scale(1.3);
+    position: absolute;
+    right: 100px;
+    top: 150px;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    z-index: 102;
+
+    /* sprite columns */
+    --sprite-c: 5;
+    /* sprite image height */
+    --sprite-h: 3000;
+    /* sprite image width */
+    --sprite-w: 9600;
+    /* sprite frames */
+    --sprite-f: 7;
+    /* animation duration based on frame rate */
+    --sprite-as: calc(var(--sprite-f) / var(--sprite-fr) * 1s);
+
+    /* frame rows */
+    --sprite-r: round(up, calc(var(--sprite-f) / var(--sprite-c)), 1);
+    /* frame height */
+    --sprite-sh: calc(var(--sprite-h) / var(--sprite-r));
+    /* frame target height, width */
+    --sprite-th: calc(var(--sprite-sh) / 2);
+
+    /* aspect ratio */
+    --sprite-ar: calc(var(--sprite-th) / var(--sprite-sh));
+    --sprite-uh: calc(var(--sprite-h) * var(--sprite-ar));
+    --sprite-uw: calc(var(--sprite-w) * var(--sprite-ar));
+
+    /* frame width */
+    --sprite-tw: calc(var(--sprite-uw) / var(--sprite-c));
+
+    .book {
+      z-index: 100;  
+      position: relative;
+      display: grid;
+      grid-template-areas:
+            "scroll scroll scroll"
+            "left markers right";
+      gap: 1rem;
+
+      .sprite {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: calc(1px * var(--sprite-th));
+        width: calc(1px * var(--sprite-tw));
+        margin: calc(-1px * calc((var(--sprite-th) - (var(--sprite-th) * 0.6107)) / 2)) calc(-1px * calc((var(--sprite-tw) - (var(--sprite-tw) * 0.7042)) / 2));
+        background-image: var(--sprite-image);
+        transform-origin: center center;
+        background-repeat: no-repeat;
+        background-size: calc(1px * var(--sprite-uw)) calc(1px * var(--sprite-uh));
+        z-index: -1;
+
+        /* Frame end position */
+        --sprite-fe: calc(var(--sprite-f) * (var(--slides) - 1));
+        --sprite-fs-n: mod(var(--sprite-fs), var(--sprite-f));
+        /* calculate the row and column position */
+        --row: calc(round(down, calc(calc(var(--sprite-tw) * var(--sprite-fs-n)) / var(--sprite-uw)), 1) * var(--sprite-th));
+        --col: mod(calc(var(--sprite-tw) * var(--sprite-fs-n)), var(--sprite-uw));
+
+        background-position: calc(-1px * var(--col)) calc(-1px * var(--row));
+        animation: frame var(--sprite-as) var(--sprite-at) 0s var(--sprite-ad) var(--sprite-af) var(--sprite-ap);
+      }
+
+      .carousel {
+        counter-increment: curpage;
+        grid-area: scroll;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        overscroll-behavior-x: contain;
+
+        display: grid;
+        margin: 0 auto;
+        width: calc(1px * (var(--sprite-tw) * 0.7042));
+        height: calc(1px * (var(--sprite-th) * 0.6107));
+        grid: 1fr / auto-flow 100%;
+
+        scrollbar-width: none; 
+        -ms-overflow-style: none;
+
+        /*scroll-timeline: --carousel-timeline x;*/
+        /*scroll-behavior: smooth;*/
+        /*scrollbar-width: none;*/
+        /*scroll-marker-group: after;*/
+
+        /*&::scroll-button(*) {
+          inline-size: 64px;
+          aspect-ratio: 1;
+          border-radius: 0;
+          border: 0;
+          background-color: transparent;
+          cursor: pointer;
+        }*/
+
+        /*&::scroll-button(*):disabled{
+          filter: invert(1);
+          opacity: 0.5;
+        }
+        &::scroll-button(*):not(:disabled):is(:hover, :active) {
+          filter: drop-shadow(2px 4px 6px black);
+        }
+
+        &::scroll-button(*):not(:disabled):active {
+          scale: 90%;
+        }*/
+
+        .carousel::-webkit-scrollbar { 
+          display: none; 
+        }
+        
+        & > .carousel-item {
+          scroll-snap-stop: always;
+          scroll-snap-align: start;
+          counter-increment: page;
+          position: relative;
+          box-sizing: border-box;
+          color: #333;
+
+          .page-container {
+            display: flex;
+            gap: 3rem;
+            height: 100%;
+          }
+
+          .left-page, .right-page {
+          flex: 1;
+          font-size: small;
+          overflow: hidden;
+          display: grid;
+          grid-template-rows: 1fr auto;
+          }
+          &:after {
+            bottom: 15px;
+            color: hsl(45.71deg 69.23% 30%);
+          }
+
+          > div {
+            text-align: justify;
+            hyphens: auto;
+            line-height: normal;
+            display: block;
+            word-wrap: break-word;
+          }
+        }
+        .left-page {
+          padding: 20px 0 20px 20px;
+          &:after {
+            content: counter(curpage);
+          }
+        }
+
+        .right-page {
+          padding: 20px 20px 20px 0;
+          counter-increment: curpage;
+          &:after {
+            content: counter(curpage);
+            place-self: self-end;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+.left-button, .right-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 105;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: transform 0.2s;
+}
+
+.left-button:hover, .right-button:hover {
+  transform: scale(1.1);
+}
+
+.left-button:active, .right-button:active {
+  transform: scale(0.9);
+}
+
+.left-button {
+  grid-area: left;
+  justify-self: end;
+}
+
+.right-button {
+  grid-area: right;
+  justify-self: start;
+}
+
+/* Progress Bar (Manual CSS) */
+.progress-bar {
+  grid-area: markers;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 12px;
+  gap: 3px;
+  margin-top: 24px;
+  border: 1px solid #000;
+  background: transparent;
+  z-index: 105;
+}
+
+.progress {
+  flex: 1;
+  height: 100%;
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.progress.active {
+  background-color: #f1e2b2;
+  box-shadow: inset 0 0 2px rgba(0,0,0,0.5);
+}
+
+.progress:hover {
+  background-color: rgba(241, 226, 178, 0.5);
+}
+
+/* İçerik Stilleri */
+.food {
+  height: 195px;
+  display: block;
+  margin: 0 auto;
+}
+
+.urun-aciklama {
+  font-size: 9px;
+  padding-left: 30px;
+}
+
+/* --- RESPONSIVE AYARLARI --- */
+@media (width < 748px) {
+  .container {
+    --sprite-th: calc(var(--sprite-sh) / 2.5);
+    > h1 { font-size: 1.25rem; }
+    .page > div { font-size: .6rem; }
+  }
+}
+
+@media (width < 560px) {
+  .container {
+    --sprite-th: calc(var(--sprite-sh) / 4);
+    > h1 { font-size: 1rem; }
+    .page > div { font-size: .35rem; }
+    .page:after { font-size: .5rem; }
+  }
+}
+
+@keyframes frame {
+  to {
+    --sprite-fs: var(--sprite-fe);
+  }
+}
+
+@media (prefers-reduced-motion) {
+  * {
+    animation: none;
+  }
+}

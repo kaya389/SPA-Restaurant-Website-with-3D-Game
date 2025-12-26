@@ -15,11 +15,26 @@
 }
 .white-desk{
     position: absolute;
-    bottom: -150px;
+    bottom: -400px;
     width: 900px;
     right: -200px;
-    height: 500px;
-    z-index: 13;
+    height: 800px;
+    z-index: 102;
+    pointer-events: none;
+}
+.brochure-button{
+    position: absolute;
+    height: 150px;
+    background: none;
+    right: 150px;
+    top: 470px;
+    z-index: 103;
+    cursor: pointer;
+    border: none;
+}
+.brochure{
+    z-index: 103;
+    height: 150px;
 }
 .desk-bottom{
     position: absolute;
@@ -27,6 +42,7 @@
     bottom: 0;
     z-index: 11;
     width: 950px;
+    pointer-events: none;
 }
 .desk-behind{
     position: absolute;
@@ -36,6 +52,7 @@
     transform: rotateZ(-2deg);
     height: 70px;
     z-index: 12;
+    pointer-events: none;
 }
 .menu-{
     position: absolute;
@@ -49,12 +66,13 @@
     width: 249.087591241px;
     top: 160px;
     right: 140px;
-    z-index: 99;
+    z-index: 103;
+    pointer-events: none;
 }
 .mouth{
     position: absolute;
     top: 270px;
     right: 255px;
-    z-index: 100;
+    z-index: 104;
     height: 11px;
 }
