@@ -1,11 +1,11 @@
 export const menu = [
     {
         src: '/menu/bon-basic.webp',
-        text: 'İlk ısırıkta iddiamızı anlarsın. Basic Burger boşuna efsane olmadı.\n BON mayonez, iceberg marul, kızarmış BON tavuğu, cheddar peyniri, Alman turşusu. Patates kızartması ile'
+        text: 'Bon Basic Burger\nİlk ısırıkta iddiamızı anlarsın. Basic Burger boşuna efsane olmadı.\n BON mayonez, iceberg marul, kızarmış BON tavuğu, cheddar peyniri, Alman turşusu. Patates kızartması ile'
     },
     {
         src: '/menu/bon-xl.webp',
-        text: 'İddia ediyoruz: Bu smash burger, favorin olacak 🔥\n80x2 (160 gr.) bastırılmış dana burger köftesi, karamelize soğan, trüf mayonez, sweet chilli sos, cheddar peyniri. Patates kızartması ile'
+        text: 'Bon XL Smash Burger\nİddia ediyoruz: Bu smash burger, favorin olacak 🔥\n80x2 (160 gr.) bastırılmış dana burger köftesi, karamelize soğan, trüf mayonez, sweet chilli sos, cheddar peyniri. Patates kızartması ile'
     },
     {
         src: '/menu/eyes-on-you.webp',
@@ -28,7 +28,7 @@ export const menu = [
         text: 'Açsan değil, gerçekten açsan, bu burger tam sana göre!\nBon Smashed XXL – Açlığın son durağı!\n80x3 (240 gr.) bastırılmış dana burger köftesi, cheddar peyniri, ince ızgara kuru soğan, burger sos. Patates kızartması ile'
     },
     {
-        src: '/menu/kanat.webp',
+        src: '/menu/kanat.png',
         text: 'Çıtır Kanat!\nLezzetin tam kalbine dokunan, dumanı üstünde, dışı çıtır içi sulu kanatlarımızla geldik!\nAma durun… Bu sadece bir kanat değil. Bu, Bon Fried Chicken‘ın özel tarifli acı sosuyla buluşmuş, damağınıza meydan okuyan bir lezzet patlaması!\nAcıyı sevenler için tam bir bağımlılık sebebi.\nGel, bu lezzeti yerinde dene. Hissedilen değil, yaşanılan bir acı bu!'
     },
     {
@@ -53,7 +53,7 @@ export const menu = [
     },
     {
         src: '/menu/garlic-bon.webp',
-        text: ''
+        text: 'Garlic BON Burger\nSarımsaklı mayonez, ıceberg marul, kızarmış BON tavuğu, cheddar peyniri. Patates kızartması ile'
     },
     {
         src: '/menu/bon-smash.webp',
@@ -88,7 +88,7 @@ export const menu = [
         text: 'Ranch sos, bon sos, hardal, acı sos, sarımsaklı mayonez'
     },
     {
-        src: '/menu/jalapeno.jpeg',
+        src: '/menu/jalapeno.jpg',
         text: 'Jalapeno Biberi'
     },
     {

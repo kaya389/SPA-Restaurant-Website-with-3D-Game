@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import {Book} from './book.jsx';
 
@@ -23,14 +24,6 @@ function NaileApla({setIsSemiOpen, setTalk, setI, setNaileApla, setIsLeftHandBot
         naileAplaMouthSemiOpen,
         naileAplaMouthFullOpen,
         naileAplaMouthSemiOpen
-    ];
-    const leftHandSequence = [
-        naileAplaLeftHandBottom,
-        naileAplaLeftHandMiddle,
-        naileAplaLeftHandTop,
-        naileAplaLeftHandTop,
-        naileAplaLeftHandMiddle,
-        naileAplaLeftHandBottom
     ];
 
     useEffect(()=>{
@@ -108,6 +101,8 @@ export function Menu({setVideoEnded, videoEnded}){
 
     const [talk, setTalk] = useState(naileAplaMouthFullOpen);
     const [isSemiOpen, setIsSemiOpen] = useState(false);
+
+    const navigate = useNavigate()
     
 
     return(
@@ -128,7 +123,8 @@ export function Menu({setVideoEnded, videoEnded}){
                     :
                     (   
                         <>
-                        {isTalking && (
+                        <div className='talking'>
+                            {isTalking && (
                             <NaileApla 
                                 setIsSemiOpen={setIsSemiOpen}
                                 setTalk={setTalk}
@@ -136,51 +132,71 @@ export function Menu({setVideoEnded, videoEnded}){
                                 setNaileApla={setNaileApla}
                                 setIsLeftHandBottom={setIsLeftHandBottom}
                             />
-                        )}
-                        <img className='white-desk' src={white_desk}/>
-                        <img className='desk-bottom' src={desk_bottom}/>
-                        <img className='desk-behind' src={desk_behind}/>
-                        <button className='brochure-button'>
-                            <img className='brochure' src={brochure}/>
-                        </button>
-                        <Book 
-                            setIsTalking={setIsTalking}
-                        />
-                        <img 
-                            className='mouth' 
-                            src={talk}
-                            style={
-                                isSemiOpen ?
-                                    {
-                                        height: '13px',
-                                        right: '255px',
-                                        width: '30px'
-                                    }
-                                    :
-                                    {
-                                        height: '11px',
-                                        right: '255px',
-                                        width: '30px'
-                                    }
-                            }
-                        />
-                        <img 
-                            className='naile-apla' 
-                            src={naileApla}
-                            style={
-                                isLeftHandBottom ? 
-                                    {
-                                        height: '360px',
-                                        width: '312px',
-                                        right: '165px',
-                                        top: '126px'
+                            )}
+                            <Book 
+                                setIsTalking={setIsTalking}
+                            />
+                            <div className='naile-apla-with-mouth'>
+                                <img 
+                                    className='naile-apla' 
+                                    src={naileApla}
+                                    style={
+                                        isLeftHandBottom ? 
+                                            {
+                                                height: '365px',
+                                                width: '425px',
+                                                paddingRight: '110px',
+                                                paddingBottom: '5px'
+                                            } 
+                                            : 
+                                            {
+                                                
+                                            }
                                     } 
-                                    : 
-                                    {
-                                        
+                                />
+                                <img 
+                                    className='mouth' 
+                                    src={talk}
+                                    style={
+                                        isSemiOpen ?
+                                            {
+                                                height: '13px',
+                                                right: '255px',
+                                                width: '37px'
+                                            }
+                                            :
+                                            {
+                                                height: '11px',
+                                                right: '255px',
+                                                width: '37px'
+                                            }
                                     }
-                            } 
-                        />
+                                />
+                            </div>
+                            <div 
+                                className='desk-button'
+                                style={
+                                    isLeftHandBottom ? {
+                                        transform: 'translateY(-78px)'
+                                    }:{
+                                        transform: 'translateY(-45px)'
+                                    }
+                                }
+                            >
+                                <img className='white-desk' src={white_desk}/>
+                                <button 
+                                    className='brochure-button'
+                                    style={{
+                                        transition: 'border 0.2s ease'
+                                    }}
+                                    onClick={()=>{
+                                        navigate('/hakkimizda');
+                                    }}
+                                >
+                                    <img className='brochure' src={brochure}/>
+                                </button>
+                            </div>
+                        </div>
                         </>
                     )
                 }

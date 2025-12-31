@@ -1,5 +1,5 @@
 .navbar{
-    position: relative;
+    position: absolute;
     width: 100%;
     height: 80px;
     z-index: 999;
@@ -10,7 +10,8 @@
     background-color: #c0c1c5;
     display: flex;
     padding-right: 10px;
-    z-index: 10000;
+    top: 0;
+    right: 0px;
 }
 
 .nav{

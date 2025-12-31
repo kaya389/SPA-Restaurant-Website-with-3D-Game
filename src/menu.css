@@ -1,78 +1,74 @@
+.menu{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 80px;
+    gap: 0;
+    background-image: url('../images/mutfak-mermer.jpg');
+}
+/**/
 .menu-start-scene{
     height: 680px;
     width: 550px;
-    position: absolute;
-    right: -15px;
-    bottom: -30px;
-    background-color: black;
-    border: none;
 }
-.menu{
-    background-color: black;
-    height: 680px;
-    width: 550px;
-    background-image: url('../images/mutfak-mermer.jpg');
+/**/
+.talking{
+    display: flex;
+    flex-direction: column;
 }
-.white-desk{
-    position: absolute;
-    bottom: -400px;
-    width: 900px;
-    right: -200px;
-    height: 800px;
-    z-index: 102;
+.naile-apla-with-mouth{
+    z-index: 1;
     pointer-events: none;
-}
-.brochure-button{
-    position: absolute;
-    height: 150px;
-    background: none;
-    right: 150px;
-    top: 470px;
-    z-index: 103;
-    cursor: pointer;
-    border: none;
-}
-.brochure{
-    z-index: 103;
-    height: 150px;
-}
-.desk-bottom{
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    z-index: 11;
-    width: 950px;
-    pointer-events: none;
-}
-.desk-behind{
-    position: absolute;
-    right: 0;
-    bottom: 70px;
-    width: 1000px;
-    transform: rotateZ(-2deg);
-    height: 70px;
-    z-index: 12;
-    pointer-events: none;
-}
-.menu-{
-    position: absolute;
-    right: -40px;
-    background: none;
-    background-image: url('../images/mutfak-mermer.jpg');
+    display: grid;
+    place-items: center;
+    transform: translateY(100px);
 }
 .naile-apla{
-    position: absolute;
-    height: 300px;
-    width: 249.087591241px;
-    top: 160px;
-    right: 140px;
-    z-index: 103;
+    grid-area: 1/1;
+    z-index: 1;
     pointer-events: none;
+    height:  300px;
+    transform: translateY(-30px);
 }
 .mouth{
-    position: absolute;
-    top: 270px;
-    right: 255px;
-    z-index: 104;
-    height: 11px;
+    grid-area: 1/1;
+    z-index: 2;
+    pointer-events: none;
+    transform: translateY(-64px);
+    padding-right: 10px;
+}
+.desk-button{
+    display: grid;
+    place-items: center;
+    background-image: url('../images/desk-bottom.png');
+    background-position: right 50px bottom 170px;
+    background-repeat: no-repeat;
+    background-size: 460px 100px;
+    padding-top: 40px;
+}
+.white-desk{
+    transform: rotateZ(0.6deg);
+    grid-area: 1/1;
+    z-index: 3;
+    pointer-events: none;
+    background-image: url('../images/desk-behind.png');
+    background-size: 100% 170px;
+    background-position: right 50px bottom 170px;
+    background-repeat: no-repeat;
+    background-position: bottom;
+}
+.brochure-button{
+    grid-area: 1/1;
+    z-index: 3;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+.brochure{
+    height: 100px;
+    transform: translateY(-60px);
+}
+.brochure:hover{
+    border: 10px solid rgb(191, 161, 52);
+    border-radius: 1000px;
 }

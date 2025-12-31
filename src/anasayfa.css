@@ -1,23 +1,86 @@
 .anasayfa{
     display: flex;
     flex-direction: column;
-}
-.dukkan-div{
-    z-index: 16;
-    display: flex;
-    justify-content: right;
-    position: relative;
+    gap: 0;
+    position: absolute;
     right: 0;
+    top: 80px;
+    bottom: 0;
+    width: 100%;
+    pointer-events: none;
+}
+/**/
+.welcome-dukkan{
+    display: flex;
+    right: 0;
+    width: 100%;
+    flex-direction: row;
+    gap: 0;
+    bottom: 0;
+    height: 300px;
+    background-image: url('../images/duvar.png');
+}
+/**/
+.welcome{
+    width: 100%;
     left: 0;
+    display: grid;
+    place-items: end;
+}
+.lamba{
+    grid-area: 1/1;
+    height: 200px;
+    z-index: 1;
+}
+.e-poster{
+    grid-area: 1/1;
+    height: 290px;
+    width: 195px;
+}
+@media(min-height: 1000px){
+    .e-poster{
+        position: absolute;
+        left: 0;
+        top: 0px;
+        z-index: 13;
+        height: 530px;
+        width: auto;
+    }
+}
+@media(min-width: 1000px){
+    .e-poster{
+        position: absolute;
+        z-index: 13;
+        left: 0px;
+        top: 0px;
+        height: 600px;
+        width: auto;
+    }
+}
+/**/
+.dukkan-div{
+    display: grid;
+    place-items: center;
     height: 300px;
     width: 240px;
 }
 .dukkan, .game-start-scene{
-    height: 300px;
+    grid-area: 1/1;
+    display: flex;
+    justify-content: right;
+    align-items: end;
+    z-index: 0;
+    height: 305px;
     width: 230px;
-    right: 0;
 }
-
+.play-button-container{
+    grid-area: 1/1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    pointer-events: auto;
+}
 .play-button-button{
     position: relative;
     pointer-events: auto;
@@ -25,7 +88,6 @@
     border: none;
     border-radius: 50%;
     cursor: pointer;
-    z-index: 16;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease;
     height: 100px;
@@ -93,28 +155,21 @@
 .play-button{
     height: 100%;
 }
-.play-button-container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 50px;
-    transform: translateX(240px);
-    position: relative;
-    z-index: 1;
+.video-and-buttons{
+    display: grid;
+    place-items: center;
+    height: 100%;
     pointer-events: auto;
 }
-
-.video-and-buttons{
+.start-game{
+    grid-area: 1/1;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    position: relative;
-    gap: 3px;
-    pointer-events: auto;
+    gap: 10px;
+    height: 90px;
 }
-
-.start-game, .exit-game{
-    z-index: 999;
+.exit-game{
+    z-index: 2;
     height: 40px;
     font-size: 20px;
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -124,124 +179,40 @@
     border: none;
     border-radius: 30%;
     background-color: rgb(180, 117, 77);
-    transform: translateY(-150px);
     cursor: pointer;
 }
-/*.game-start-scene{
+.game-start-scene{
+    grid-area: 1/1;
     padding-bottom: 0;
     margin-bottom: 0;
     height: 300px;
     z-index: 1;
     bottom: 0;
-}*/
-/**/
-.welcome-dukkan{
-    display: flex;
-    right: 0;
-    width: 100%;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 0;
-    bottom: 0;
-    height: 300px;
-    background-image: url('../images/duvar.png');
-}
-.welcome{
-    width: 100%;
-    cursor: pointer;
-    left: 0;
-    display: flex;
-    justify-content: right;
-    align-items: end;
-}
-.lamba{
-    height: 200px;
-    z-index: 1;
-    position: absolute;
-}
-.e-poster{
-    height: 290px;
-    z-index: 1;
-    transform: translateX(15px);
-}
-@media (min-height: 740px){
-    .e-poster{
-        height: 270px;
-        transform: translateX(0px);
-    }
-}
-@media(min-height: 844px){
-    .e-poster{
-        height: 300px;
-        transform: translateX(0px);
-    }
 }
 /**/
 .tanitim{
-    top: 0;
+    height: 620px;
+    position: absolute;
+    top: 300px;
     display: flex;
     flex-direction: row;
     width: 100%;
-    height: 300px;
-    cursor: pointer;
-    bottom: 0;
     justify-content: flex-end;
     pointer-events: none;
+    background-image: url('../images/kaldırım-back.png');
+    background-size: 100% 800px;
+    background-repeat: none;
 }
-.kaldirim{
-    width: 100%;
-    height: 400px;
-    position: absolute;
-    pointer-events: none;
-}
-@media (min-height: 700px){
-    .kaldirim{
-        height: 556px;
+@media (min-height: 1000px){
+    .tanitim{
+        height: 1000px;
     }
 }
 .koltuk{
+    height: 50%;
     background-color: none;
     z-index: 1;
     pointer-events: none;
-}
-@media(min-height: 1000px){
-    .kaldirim{
-        height: 650px;
-    }
-    .koltuk{
-        transform: translateY(100px);
-        height: 370px;
-    }
-    .e-poster{
-    height: 450px;
-    z-index: 1;
-    transform: translateX(-200px);
-    transform: translateY(200px);
-    padding-right: 200px;
-    }
-}
-@media(min-height: 1100px){
-    .kaldirim{
-        height: 800px;
-    }
-    .koltuk{
-        height: 500px;
-    }
-}
-@media(min-height: 1200px){
-    .kaldirim{
-        height: 1000px;
-    }
-    .koltuk{
-        height: 500px;
-    }
-    .e-poster{
-    height: 600px;
-    z-index: 1;
-    transform: translateX(-200px);
-    transform: translateY(400px);
-    padding-right: 350px;
-    }
 }
 
 .qr-button{
@@ -251,7 +222,6 @@
     cursor: pointer;
     background: none;
     position: absolute;
-    cursor: pointer;
     pointer-events: auto;
     display: flex;
     justify-content: center;

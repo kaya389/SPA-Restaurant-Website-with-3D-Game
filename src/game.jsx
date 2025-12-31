@@ -244,7 +244,7 @@ export function Game({isActive, handleExitGame}){
     return(
         /*main-screen*/
         <div className="game-main-screen" style={{ height: "100%", width:'100%',
-            background: "black", position: 'fixed', right: '0', transform:'translateY(0px)',
+            background: "black", position: 'fixed', right: '0', top: 0,
             visibility: isActive ? "visible" : "hidden", 
             pointerEvents: isActive ? "auto" : "none", zIndex: 10000
          }}>

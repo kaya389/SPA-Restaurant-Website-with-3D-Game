@@ -6,6 +6,8 @@ import { AnaSayfa } from './anasayfa.jsx';
 import {Menu} from './menu.jsx';
 import {Game} from './game.jsx'
 import {TwoBirds} from './2birds.jsx';
+import { Hakkimizda } from './hakkimizda.jsx';
+import { AdresIletisim } from './AdresIletisim.jsx';
 import './App.css';
 
 function App() {
@@ -84,6 +86,14 @@ function App() {
           <Menu 
             setVideoEnded={setVideoEnded} 
             videoEnded={videoEnded}/>
+        }/>
+        <Route path="/hakkimizda" element={
+          <Hakkimizda
+          />
+        }/>
+        <Route path="/iletisim" element={
+          <AdresIletisim
+          />
         }/>
       </Routes>
     </>

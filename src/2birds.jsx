@@ -9,6 +9,8 @@ function SingleBird({ source, texturePath, scale, speed, offset }) {
     const fbx = useFBX(source);
     const texture = useTexture(texturePath);
 
+    const mouseRef = useRef({x: 0, y: 0});
+
     const clone = useMemo(() => {
         const c = SkeletonUtils.clone(fbx);
         c.traverse((child) => {
@@ -28,7 +30,18 @@ function SingleBird({ source, texturePath, scale, speed, offset }) {
         meshRef.current.position.x = offset.x;
         meshRef.current.position.y = 0;
 
-    },[]);
+        const handleMouseMove = (event)=>{
+            mouseRef.current.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouseRef.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        }
+
+        window.addEventListener('mousemove', handleMouseMove);
+
+        return ()=>{
+            window.removeEventListener('mousemove', handleMouseMove);
+        }
+
+    },[offset.x]);
 
 
     useFrame((state) => {
@@ -36,8 +49,8 @@ function SingleBird({ source, texturePath, scale, speed, offset }) {
         const time = state.clock.getElapsedTime();
         
 
-        const targetX = (state.pointer.x);
-        const targetY = (state.pointer.y);
+        const targetX = mouseRef.current.x;
+        const targetY = mouseRef.current.y;
 
         
         const flapSpeed = 5; // Çırpma hızı
@@ -52,8 +65,8 @@ function SingleBird({ source, texturePath, scale, speed, offset }) {
             (0):(targetY - meshRef.current.position.y* offset.y) * speed;
         
         
-        meshRef.current.rotation.y = state.pointer.x;
-        meshRef.current.rotation.x = -state.pointer.y;
+        meshRef.current.rotation.y = targetX;
+        meshRef.current.rotation.x = -targetY;
         
     });
 
@@ -69,11 +82,11 @@ function SingleBird({ source, texturePath, scale, speed, offset }) {
 
 export function TwoBirds() {
     return (
-        <Canvas 
+        <Canvas
             style={{ 
                 position: 'fixed', top: 0, left: 0, 
                 width: '100%', height: '100%', 
-                pointerEvents: 'auto',
+                pointerEvents: 'none',
                 zIndex: 14
             }}
         >

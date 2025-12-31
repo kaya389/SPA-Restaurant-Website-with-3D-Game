@@ -227,6 +227,9 @@ export function Book({setIsTalking}){
                                 key = {index}
                                 className = {`progress ${index<=activeIndex ? 'active': ''}`}
                                 onClick={()=>scrollToPage(index)}
+                                style={{
+                                    zIndex: 106
+                                }}
                             />
                         ))}
                     </div>

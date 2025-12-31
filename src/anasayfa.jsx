@@ -114,16 +114,19 @@ export function AnaSayfa({gameModActive, setGameModActive,
                         </button>
                     </div>
                     {gameStart?(
-                        <div className='video-and-buttons'>
-                            <video
-                                className='game-start-scene'
-                                src={intro}
-                                autoPlay
-                                
-                            />{openButton?(
-                            <>
-                            <button 
-                                className='start-game'
+                    <div className='video-and-buttons'>
+                        <video
+                            className='game-start-scene'
+                            src={intro}
+                            autoPlay
+                            
+                        />{openButton?(
+                        <>
+                        <div
+                            className='start-game'
+                        >
+                            <button
+                                className='exit-game'
                                 onClick = {()=>{
                                     setGameModActive(true)
                                 }}
@@ -140,8 +143,10 @@ export function AnaSayfa({gameModActive, setGameModActive,
                                 }}
                             >
                                 &#215; Çık
-                            </button></>):(<div/>)}
+                            </button>
                         </div>
+                        </>):(<div/>)}
+                    </div>
                     ):(
                     <img 
                         className="dukkan" 
@@ -151,7 +156,6 @@ export function AnaSayfa({gameModActive, setGameModActive,
                 </div>
             </div>
             <div className='tanitim'>
-                <img className='kaldirim' src={kaldirim}/>
                 <img className='koltuk' src={koltuk}/>
                 <button
                     className='qr-button'
@@ -163,17 +167,17 @@ export function AnaSayfa({gameModActive, setGameModActive,
                     <img className='qr-platform' src={qr_platform}/>
                 </button>
                 {beniOku &&(
-                    <>
-                    <button className='cik'
-                        onClick={()=>{
-                            setBeniOku(false);
-                            console.log('a');
-                        }}
-                    >
-                        ❌
-                    </button>
-                    <img className='beni-oku' src={beni_oku}/>
-                    </>
+                <>
+                <button className='cik'
+                    onClick={()=>{
+                        setBeniOku(false);
+                        console.log('a');
+                    }}
+                >
+                    ❌
+                </button>
+                <img className='beni-oku' src={beni_oku}/>
+                </>
                 )}
             </div>
         </div>

@@ -1,0 +1,14 @@
+.hakkimizda{
+    min-height: 100vh;
+    padding-top: 80px;
+    background-image: url('../images/hakkimizda-bg.png');
+    background-repeat: repeat;
+    background-size: cover;
+    min-width: 100vw;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+.hakkimizda-start-scene{
+    min-height: 100vh;
+}
