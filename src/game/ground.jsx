@@ -4,12 +4,13 @@ import {useTexture} from '@react-three/drei';
 import * as THREE from 'three';
 
 export const Ground = React.memo(function Ground(){
+    const baseUrl = import.meta.env.BASE_URL;
     const {gl} = useThree();
 
     const textures = useTexture({
-        map: '/textures/Ground085_2K-JPG_Color.jpg',
-        normalMap : '/textures/Ground085_2K-JPG_NormalGL.jpg',
-        roughnessMap: '/textures/Ground085_2K-JPG_Roughness.jpg'
+        map: `${baseUrl}textures/Ground085_2K-JPG_Color.jpg`,
+        normalMap : `${baseUrl}/textures/Ground085_2K-JPG_NormalGL.jpg`,
+        roughnessMap: `${baseUrl}/textures/Ground085_2K-JPG_Roughness.jpg`
     });
 
     useEffect(()=>{
