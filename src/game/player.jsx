@@ -4,10 +4,11 @@ import {useFrame} from '@react-three/fiber';
 import * as THREE from 'three';
 
 export function Player({laneRef, jumpTriggerRef, playerPositionRef}){
+    const baseUrl = import.meta.env.BASE_URL;
     const meshRef = useRef();
 
-    const fbx = useFBX('/cockatrice.fbx');
-    const texture = useTexture('/Material_BaseColor.png');
+    const fbx = useFBX(`${baseUrl}cockatrice.fbx`);
+    const texture = useTexture(`${baseUrl}Material_BaseColor.png`);
 
     const SMOOTHNESS = 8;
 
