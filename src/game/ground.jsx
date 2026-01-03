@@ -9,8 +9,8 @@ export const Ground = React.memo(function Ground(){
 
     const textures = useTexture({
         map: `${baseUrl}textures/Ground085_2K-JPG_Color.jpg`,
-        normalMap : `${baseUrl}/textures/Ground085_2K-JPG_NormalGL.jpg`,
-        roughnessMap: `${baseUrl}/textures/Ground085_2K-JPG_Roughness.jpg`
+        normalMap : `${baseUrl}textures/Ground085_2K-JPG_NormalGL.jpg`,
+        roughnessMap: `${baseUrl}textures/Ground085_2K-JPG_Roughness.jpg`
     });
 
     useEffect(()=>{

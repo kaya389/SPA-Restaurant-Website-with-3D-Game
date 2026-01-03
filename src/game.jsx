@@ -25,7 +25,9 @@ toPreload.forEach((path)=>{
     useFBX.preload(path);
 });
 
-useFBX.preload('/cockatrice.fbx');
+const baseUrl = import.meta.env.BASE_URL;
+const cityUrl = `${baseUrl}city.exr`;
+useFBX.preload(`${baseUrl}cockatrice.fbx`);
 
 function GameContent({ setGameOver, setCanDie, setHearts, keyBoard, setKeyBoard}) {
     const laneRef = useRef(1);
@@ -345,7 +347,7 @@ export function Game({isActive, handleExitGame}){
                     <ambientLight intensity={1}/>
                     <directionalLight position={[10, 10, 5]} intensity={1.5}/>
                     <Environment
-                        files="/city.exr"
+                        files={cityUrl}
                         background
                     />
 

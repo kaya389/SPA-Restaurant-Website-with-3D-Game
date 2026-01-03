@@ -75,12 +75,17 @@ function SingleBird({ source, texturePath, scale, speed, offset }) {
             ref={meshRef}
             object={clone} 
             scale={scale} 
-            rotation={[0, 0, 0]} 
+            rotation={[0, 0, 0]}
         />
     );
 }
 
 export function TwoBirds() {
+    const baseUrl = import.meta.env.BASE_URL;
+    const cockatriceSource = `${baseUrl}cockatrice.fbx`;
+    const littleBonSource = `${baseUrl}bon-little.fbx`;
+    const cockatriceTexture = `${baseUrl}Material_BaseColor.png`;
+    const littleBonTexture = `${baseUrl}bon-little_texture.png`;
     return (
         <Canvas
             style={{ 
@@ -95,16 +100,16 @@ export function TwoBirds() {
             
             <Suspense fallback={null}>
                 <SingleBird 
-                    source="/cockatrice.fbx"
-                    texturePath="/Material_BaseColor.png" 
+                    source= {cockatriceSource}
+                    texturePath= {cockatriceTexture}
                     scale={[0.01, 0.01, 0.01]} 
                     speed={0.005} 
                     offset={{ x: -1.4, y:  1.7}}
                 />
 
                 <SingleBird 
-                    source="/bon-little.fbx" 
-                    texturePath="/bon-little_texture.png" 
+                    source={littleBonSource} 
+                    texturePath= {littleBonTexture}
                     scale={[0.006, 0.006, 0.006]} 
                     speed={0.009}
                     offset={{ x: -0.6, y: 2}}
