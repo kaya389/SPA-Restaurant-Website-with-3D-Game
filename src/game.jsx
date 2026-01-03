@@ -67,12 +67,12 @@ function GameContent({ setGameOver, setCanDie, setHearts, inputRef}) {
         const handleKeyDown = (e) => {
             if (!canMove.current) return;
 
-            if (e.code === 'Space' || e.key === 'ArrowUp' || inputRef.current === 'Space') {
+            if (e.code === 'Space' || e.key === 'ArrowUp') {
                 jumpTriggerRef.current = true;
             }
-            if ((e.key === 'ArrowLeft' || inputRef.current === 'ArrowLeft') && laneRef.current > 0) {
+            if ((e.key === 'ArrowLeft') && laneRef.current > 0) {
                 laneRef.current -= 1; changed = true;
-            } else if ((e.key === 'ArrowRight' || inputRef.current === 'ArrowRight') && laneRef.current < 2) {
+            } else if ((e.key === 'ArrowRight') && laneRef.current < 2) {
                 laneRef.current += 1; changed = true;
             }
 

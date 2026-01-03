@@ -23,19 +23,36 @@
     place-items: center;
     transform: translateY(100px);
 }
+.naile-with-arms{
+    display: grid;
+    place-items: center;
+    gap: 0;
+    height: 300px;
+}
+.naile-arms{
+    grid-area: 1/1;
+    height: 170px;
+    z-index: 2;
+    position: absolute;
+    padding-right: 260px;
+    transform: translateY(35px);
+}
 .naile-apla{
     grid-area: 1/1;
     z-index: 1;
     pointer-events: none;
     height:  300px;
     transform: translateY(-30px);
+    
 }
 .mouth{
     grid-area: 1/1;
-    z-index: 2;
+    position: absolute;
+    bottom: 206px;
+    right: 326px;
+    z-index: 5;
     pointer-events: none;
-    transform: translateY(-64px);
-    padding-right: 10px;
+    
 }
 .desk-button{
     display: grid;
@@ -45,6 +62,7 @@
     background-repeat: no-repeat;
     background-size: 460px 100px;
     padding-top: 40px;
+    transform: translateY(-45px);
 }
 .white-desk{
     transform: rotateZ(0.6deg);

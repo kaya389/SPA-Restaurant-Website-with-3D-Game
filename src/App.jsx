@@ -31,7 +31,29 @@ function App() {
     }, 50);
   }
 
-  
+  useEffect(()=>{
+    const preventDefault = (e) => e.preventDefault();
+
+    const preventZoom = (e) => {
+      if(e.touches.length>1){
+        e.preventDefault();
+      }
+    }
+
+    document.addEventListener('touchmove', preventDefault, { passive: false });
+    document.addEventListener('gesturestart', preventDefault); // Safari özel zoom
+    document.addEventListener('gesturechange', preventDefault);
+    document.addEventListener('gestureend', preventDefault);
+    document.addEventListener('touchstart', preventZoom, { passive: false });
+
+    return () => {
+      document.removeEventListener('touchmove', preventDefault);
+      document.removeEventListener('gesturestart', preventDefault);
+      document.removeEventListener('gesturechange', preventDefault);
+      document.removeEventListener('gestureend', preventDefault);
+      document.removeEventListener('touchstart', preventZoom);
+    }
+  })
   
   useEffect(()=>{
       if (location.pathname !== '/menu') {

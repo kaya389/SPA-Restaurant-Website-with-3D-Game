@@ -111,3 +111,14 @@ body {
 		}
 	}
 }
+.adres-form{
+	position: absolute;
+	bottom: 7vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	left: 50%;
+	transform: translateX(-50%);
+	height: 30vh;
+	width: 90vw;
+}

@@ -11,6 +11,7 @@ import naileAplaMouthFullOpen from '../images/naile-apla/opened-full.png';
 import naileAplaLeftHandBottom from '../images/naile-apla/left-hand-bottom.png';
 import naileAplaLeftHandMiddle from '../images/naile-apla/left-hand-middle.png';
 import naileAplaLeftHandTop from '../images/naile-apla/left-hand-top.png';
+import mainNaile from '../images/naile-apla/mouth-closed-.png';
 import brochure from '../images/hakkimizda.png';
 
 import './menu.css';
@@ -135,23 +136,28 @@ export function Menu({setVideoEnded, videoEnded}){
                                 setIsTalking={setIsTalking}
                             />
                             <div className='naile-apla-with-mouth'>
-                                <img 
-                                    className='naile-apla' 
-                                    src={naileApla}
-                                    style={
-                                        isLeftHandBottom ? 
+                                <div className='naile-with-arms'>
+                                    <img
+                                        className='naile-arms'
+                                        src={naileApla}
+                                        style={
+                                            !isLeftHandBottom ?
                                             {
-                                                height: '365px',
-                                                width: '425px',
-                                                paddingRight: '110px',
-                                                paddingBottom: '5px'
-                                            } 
-                                            : 
+                                                height: '210px',
+                                                paddingLeft: '80px',
+                                                transform: 'translateY(15px)'
+                                            }
+                                            :
                                             {
                                                 
                                             }
-                                    } 
-                                />
+                                        }
+                                    />
+                                    <img 
+                                        className='naile-apla' 
+                                        src={mainNaile}
+                                    />
+                                </div>
                                 <img 
                                     className='mouth' 
                                     src={talk}
@@ -159,27 +165,18 @@ export function Menu({setVideoEnded, videoEnded}){
                                         isSemiOpen ?
                                             {
                                                 height: '13px',
-                                                right: '255px',
-                                                width: '37px'
+                                                width: '25px'
                                             }
                                             :
                                             {
-                                                height: '11px',
-                                                right: '255px',
-                                                width: '37px'
+                                                height: '15px',
+                                                width: '25px'
                                             }
                                     }
                                 />
                             </div>
                             <div 
-                                className='desk-button'
-                                style={
-                                    isLeftHandBottom ? {
-                                        transform: 'translateY(-78px)'
-                                    }:{
-                                        transform: 'translateY(-45px)'
-                                    }
-                                }
+                                className='desk-button'  
                             >
                                 <img className='white-desk' src={white_desk}/>
                                 <button 

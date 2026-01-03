@@ -68,7 +68,7 @@ export function AdresIletisim(){
                 position: 'absolute',
                 zIndex: 12,
                 width: '384px',
-                height: '340px',
+                height: '40vh',
                 top: '100px',
                 left: '50%',
                 transform: 'translateX(-50%)'
@@ -90,49 +90,27 @@ export function AdresIletisim(){
                 referrerPolicy="no-referrer-when-downgrade"
             />
         </div>
-
-        <div
-            style={{
-                position: 'absolute',
-                bottom: '10px',
-                paddingTop: '40px',
-                width: '400px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                flexDirection: 'column'
-            }}
-        >   
             <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    gap: '40px',
-                    paddingTop: '20px'
-                }}
+                className='adres-form'
             >
-            <div>
-            <p>
-                📍istanbulluoğlu apt, Cemalpaşa, Ethem Ekin Sk. D:29F, 01120 Seyhan/Adana
-            </p>
-            <p>
-                ⏳️Açılış: 11.00
-            </p>
-            <p>
-                ❗Kapanış : Ürün bitimi
-            </p>
-            <p>
-                BİZE ULAŞIN
-            </p>
-            ☎️+90 530 337 74 24
-            
+                <div>
+                <p>
+                    📍istanbulluoğlu apt, Cemalpaşa, Ethem Ekin Sk. D:29F, 01120 Seyhan/Adana
+                </p>
+                <p>
+                    ⏳️Açılış: 11.00
+                </p>
+                <p>
+                    ❗Kapanış : Ürün bitimi
+                </p>
+                <p>
+                    BİZE ULAŞIN
+                </p>
+                ☎️+90 530 337 74 24
+                
+                </div>
+                <IletisimFormu/>
             </div>
-            <IletisimFormu/>
-            </div>
-        </div>
         </>
     );
 }
