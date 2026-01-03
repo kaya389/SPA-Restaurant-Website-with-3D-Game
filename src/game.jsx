@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, Suspense, useState} from 'react';
 
-import {Canvas} from '@react-three/fiber';
+import {Canvas, useFrame} from '@react-three/fiber';
 import {useFBX, Environment} from '@react-three/drei';
 import * as THREE from 'three';
 
@@ -29,28 +29,37 @@ const baseUrl = import.meta.env.BASE_URL;
 const cityUrl = `${baseUrl}city.exr`;
 useFBX.preload(`${baseUrl}cockatrice.fbx`);
 
-function GameContent({ setGameOver, setCanDie, setHearts, keyBoard, setKeyBoard}) {
+function GameContent({ setGameOver, setCanDie, setHearts, inputRef}) {
     const laneRef = useRef(1);
     const jumpTriggerRef = useRef(false);
     const canMove = useRef(true);
     const playerPositionRef = useRef(new THREE.Vector3());
 
-    useEffect(() => {
-        let changed = false;
-        if(keyBoard){
+    useFrame(()=>{
+        if(inputRef.current){
+            let changed = false;
             if (!canMove.current) return;
-            if (keyBoard === 'Space') {
+            if (inputRef.current === 'Space') {
                 jumpTriggerRef.current = true;
             }
-            if (keyBoard === 'ArrowLeft' && laneRef.current > 0) {
+            if (inputRef.current === 'ArrowLeft' && laneRef.current > 0) {
                 laneRef.current -= 1; 
                 changed = true;
-            } else if (keyBoard === 'ArrowRight' && laneRef.current < 2) {
+            } else if (inputRef.current === 'ArrowRight' && laneRef.current < 2) {
                 laneRef.current += 1; 
                 changed = true;
             }
+        
+            inputRef.current = null;
+            if (changed) {
+                canMove.current = false;
+                setTimeout(() => { canMove.current = true; }, 100);
+            }
         }
-        setKeyBoard('');
+    })
+    useEffect(() => {
+        let changed = false;
+        
         const deathTimer = setTimeout(() => {
             setCanDie(true);
         }, 15000);
@@ -58,12 +67,12 @@ function GameContent({ setGameOver, setCanDie, setHearts, keyBoard, setKeyBoard}
         const handleKeyDown = (e) => {
             if (!canMove.current) return;
 
-            if (e.code === 'Space' || e.key === 'ArrowUp' || keyBoard === 'Space') {
+            if (e.code === 'Space' || e.key === 'ArrowUp' || inputRef.current === 'Space') {
                 jumpTriggerRef.current = true;
             }
-            if ((e.key === 'ArrowLeft' || keyBoard === 'ArrowLeft') && laneRef.current > 0) {
+            if ((e.key === 'ArrowLeft' || inputRef.current === 'ArrowLeft') && laneRef.current > 0) {
                 laneRef.current -= 1; changed = true;
-            } else if ((e.key === 'ArrowRight' || keyBoard === 'ArrowRight') && laneRef.current < 2) {
+            } else if ((e.key === 'ArrowRight' || inputRef.current === 'ArrowRight') && laneRef.current < 2) {
                 laneRef.current += 1; changed = true;
             }
 
@@ -77,7 +86,7 @@ function GameContent({ setGameOver, setCanDie, setHearts, keyBoard, setKeyBoard}
             window.removeEventListener('keydown', handleKeyDown);
             clearTimeout(deathTimer);
         };
-    }, [setCanDie, keyBoard]);
+    }, [setCanDie, inputRef]);
 
     useEffect(()=>{
         return () => {
@@ -180,7 +189,7 @@ export function Game({isActive, handleExitGame}){
 
     const [gameOver, setGameOver] = useState(false);
 
-    const[keyBoard, setKeyBoard] = useState('');
+    const inputRef = useRef(null);
 
     const handleRestart = ()=>{
         setHearts(3);
@@ -269,27 +278,33 @@ export function Game({isActive, handleExitGame}){
             }}>
                 <button
                     style={{height: '100px', width: '100px'}}
-                    onClick={()=>{
-                        setKeyBoard('ArrowLeft');
+                    onTouchStart={(e)=>{
+                        e.preventDefault();
+                        inputRef.current = 'ArrowLeft';
                     }}
+                    onMouseDown={() => inputRef.current = 'ArrowLeft'}
                 >
                     &#8592;
                 </button>
 
                 <button
                     style={{height: '100px', width: '100px'}}
-                    onClick={()=>{
-                        setKeyBoard('Space');
+                    onTouchStart={(e)=>{
+                        e.preventDefault();
+                        inputRef.current = 'Space';
                     }}
+                    onMouseDown={() => inputRef.current = 'Space'}
                 >
                     &#8593;
                 </button>
 
                 <button
                     style={{height: '100px', width: '100px'}}
-                    onClick={()=>{
-                        setKeyBoard('ArrowRight');
+                    onTouchStart={(e)=>{
+                        e.preventDefault();
+                        inputRef.current = 'ArrowRight';;
                     }}
+                    onMouseDown={() => inputRef.current = 'ArrowRight'}
                 >
                     &#8594;
                 </button>
@@ -362,8 +377,7 @@ export function Game({isActive, handleExitGame}){
                                 setGameOver={setGameOver}
                                 setCanDie={setCanDie}
                                 setHearts={setHearts}
-                                keyBoard={keyBoard}
-                                setKeyBoard={setKeyBoard}
+                                inputRef = {inputRef}
                             />
                         )}
                     </Suspense>
