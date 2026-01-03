@@ -209,26 +209,27 @@ export function Game({isActive, handleExitGame}){
     useEffect(()=>{
         if(!isActive)return;
         if (!audioRef.current) {
-            audioRef.current = new Audio('/music.mp3');
+            audioRef.current = new Audio(`${baseUrl}music.mp3`);
             audioRef.current.loop = true;
             audioRef.current.volume = 0.3;
         }
 
         const playMusic = () => {
-            if (audioRef.current) {
+            if (audioRef.current && audioRef.current.paused) {
                 audioRef.current.play()
                     .then(() => {
-                        console.log("🎵 Müzik Başladı!");
                         window.removeEventListener('click', playMusic);
                         window.removeEventListener('keydown', playMusic);
+                        window.removeEventListener('touchstart', playMusic);
                     });
             }
         };
 
-        if(isActive) playMusic();
+        playMusic();
 
         window.addEventListener('keydown', playMusic);
         window.addEventListener('click', playMusic);
+        window.addEventListener('touchstart', playMusic);
 
         return () => {
             //assetPool.reset();
@@ -238,6 +239,7 @@ export function Game({isActive, handleExitGame}){
             }
             window.removeEventListener('keydown', playMusic);
             window.removeEventListener('click', playMusic);
+            window.removeEventListener('touchstart', playMusic);
         };
     }, [isActive]);
 
