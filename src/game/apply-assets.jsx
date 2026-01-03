@@ -41,7 +41,6 @@ function useObstacleLogic(objectRef, data, laneRef, setGameOver, playerPositionR
                             }
                             return newHearts;
                         });
-                        console.log('carp');
                         hasCollided.current = true;
                         if(!hasBeenRemoved.current){
                             hasBeenRemoved.current = true;
@@ -78,7 +77,6 @@ function CreateFBXElement({data, laneRef, setGameOver, playerPositionRef, setHea
         const acquiredObj = assetPool.acquire(data.source);
 
         if(!acquiredObj){
-            console.warn("⚠️ Pool dolu veya obje yok:", data.source);
             return null;
         }
 
@@ -95,7 +93,6 @@ function CreateFBXElement({data, laneRef, setGameOver, playerPositionRef, setHea
         setObj(acquiredObj);
 
         return () => {
-            console.log('CreateFBXElement unmount, release ediliyor:', data.id);
             assetPool.release(acquiredObj);
             setObj(null);
         };
@@ -142,11 +139,6 @@ export function AssetElement({data, laneRef, setGameOver, playerPositionRef, onR
             intervalRef.current = null;
         }
     }, [biggerThen20, notRival]);
-
-    useEffect(()=>{
-        console.log(notRival);
-
-    }, [notRival]);
 
     return(
         <group>

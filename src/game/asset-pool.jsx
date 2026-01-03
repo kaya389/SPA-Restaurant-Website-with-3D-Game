@@ -40,7 +40,6 @@ class AssetPool{
 
         clone.position.set(0, -1000, 0);
         this.pools[source].push(clone);
-        console.log(`✅ Pool hazır: ${source}`);
     }
 
     acquire(source){
@@ -52,7 +51,6 @@ class AssetPool{
             free.userData.inUse = true;
             return free;
         }
-        console.warn(`⚠️ Pool dolu: ${source}`);
         return null;
     }
 

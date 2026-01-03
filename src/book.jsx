@@ -3,14 +3,14 @@ import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {menu} from './whats-in-menu.jsx';
 
 import './book.css';
-import { time } from 'three/tsl';
 
 const TypewriterText = React.memo(({text, speed=30, onTypingStart, onTypingEnd}) => {
+    const baseUrl = import.meta.env.BASE_URL;
     const [displayedText, setDisplayedText] = useState('');
     const containerRef = useRef(null);
     const [isVisible, setIsVisible] = useState(false);
 
-    const audioRef = useRef(new Audio('/typewriter.mp3'));
+    const audioRef = useRef(new Audio(`${baseUrl}typewriter.mp3`));
 
     const hasStartedRef = useRef(false);
 
@@ -35,31 +35,41 @@ const TypewriterText = React.memo(({text, speed=30, onTypingStart, onTypingEnd})
         let intervalId;
         let timeoutId;
 
-        const playSound = ()=>{
+        const unlockAudio = () => {
             if(audioRef.current){
-                audioRef.current.time = 0;
-
-                const playPromise = audioRef.current.play();
-
-                if (playPromise !== undefined) {
-                    playPromise.catch((error) => {
-                    console.log("Tarayıcı otomatik oynatmayı engelledi:", error);
-                    // Burada belki ekrana "Sesi açmak için tıkla" butonu koyabilirsin
-                    });
-                }
+                audioRef.current.play().then(()=>{
+                    audioRef.current.pause();
+                    audioRef.current.currentTime = 0;
+                }).catch(()=>{});
             }
-        };
-        const stopSound = ()=>{
-            clearInterval(intervalId);
-            clearTimeout(timeoutId);
-            if(audioRef.current){
-                audioRef.current.pause();
-                audioRef.current.currentTime = 0;
-            }
-            if (onTypingEnd && hasStartedRef.current) {
-                 onTypingEnd(); 
-            }
+            window.removeEventListener('click', unlockAudio);
+            window.removeEventListener('keydown', unlockAudio);
+            window.removeEventListener('touchstart', unlockAudio);
         }
+
+        const playSound = ()=>{
+            if(!audioRef.current) return;
+        
+            audioRef.current.currentTime = 0;
+
+            const playPromise = audioRef.current.play();
+
+            if(playPromise !== undefined){
+                playPromise.catch(error=>{
+                    window.addEventListener('click', unlockAudio);
+                    window.addEventListener('keydown', unlockAudio);
+                    window.addEventListener('touchstart', unlockAudio);
+                })
+            }
+
+            audioRef.current.play()
+                .then(()=>{
+                    window.removeEventListener('click', playSound);
+                    window.removeEventListener('keydown', playSound);
+                    window.removeEventListener('touchstart', playSound);
+                })
+        
+        };
 
         if(isVisible){
             if(hasStartedRef.current) return;
@@ -84,7 +94,6 @@ const TypewriterText = React.memo(({text, speed=30, onTypingStart, onTypingEnd})
                         clearInterval(intervalId);
                         if(onTypingEnd){
                             onTypingEnd();
-                            stopSound();
                         }
                     }
                 }, speed);
@@ -97,6 +106,9 @@ const TypewriterText = React.memo(({text, speed=30, onTypingStart, onTypingEnd})
         return ()=>{
             clearTimeout(timeoutId);
             clearInterval(intervalId);
+            window.removeEventListener('click', unlockAudio);
+            window.removeEventListener('keydown', unlockAudio);
+            window.removeEventListener('touchstart', unlockAudio);
         }
     }, [isVisible, text, speed]);
 

@@ -5,8 +5,6 @@ import {Book} from './book.jsx';
 
 import menu_start from '../images/menu-start.mp4';
 import white_desk from '../images/white-desk.png';
-import desk_bottom from '../images/desk-bottom.png';
-import desk_behind from '../images/desk-behind.png';
 import naileAplaMouthClosed from '../images/naile-apla/mouth-closed.png';
 import naileAplaMouthSemiOpen from '../images/naile-apla/opened-middle.png';
 import naileAplaMouthFullOpen from '../images/naile-apla/opened-full.png';

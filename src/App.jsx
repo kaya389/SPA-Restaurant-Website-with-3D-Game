@@ -11,6 +11,7 @@ import { AdresIletisim } from './AdresIletisim.jsx';
 import './App.css';
 
 function App() {
+  const baseUrl = import.meta.env.BASE_URL;
   const [gameModActive, setGameModActive] = useState(false);
   const [gameStart, setGameStart] = useState(false);
   const [positionChange, setPositionChange] = useState(false);
@@ -30,29 +31,57 @@ function App() {
     }, 50);
   }
 
+  
+  
   useEffect(()=>{
-      if(location.pathname === '/menu'){
-        audioRef.current = new Audio('/cornered.mp3');
+      if (location.pathname !== '/menu') {
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.currentTime = 0;
+        }
+        return; 
+      }
+      if(!audioRef.current){
+        audioRef.current = new Audio(`${baseUrl}cornered.mp3`);
         audioRef.current.loop = true;
         audioRef.current.volume = 0.3;
+      }
 
-        const playPromise = audioRef.current.play();
-
-        if (playPromise !== undefined) {
-            playPromise.catch((error) => {
-              console.log("Tarayıcı otomatik oynatmayı engelledi:", error);
-              // Burada belki ekrana "Sesi açmak için tıkla" butonu koyabilirsin
+      const playMusic = () => {
+        if(audioRef.current && audioRef.current.paused){
+          audioRef.current.play()
+            .then(()=>{
+              window.removeEventListener('click', playMusic);
+              window.removeEventListener('keydown', playMusic);
+              window.removeEventListener('touchstart', playMusic);
             });
         }
-      }
+      };
+
+      playMusic();
+
+      window.addEventListener('keydown', playMusic);
+      window.addEventListener('click', playMusic);
+      window.addEventListener('touchstart', playMusic);
+
+      
       return()=>{
         if(audioRef.current){
           audioRef.current.pause();
           audioRef.current.currentTime = 0;
         }
-        handleExitGame();
+        window.removeEventListener('keydown', playMusic);
+        window.removeEventListener('click', playMusic);
+        window.removeEventListener('touchstart', playMusic);
       }
   }, [location.pathname]);
+
+  useEffect(()=>{
+    if(!gameModActive) return;
+    return()=>{
+      handleExitGame();
+    }
+  }, [location.pathname, gameModActive]);
   
   return (
     <>

@@ -175,7 +175,6 @@ export function Game({isActive, handleExitGame}){
     const [showImage, setShowImage] = useState(true);
     
     const [canDie, setCanDie] = useState(false);
-    console.log(canDie);
 
     const [restartKey, setRestartKey] = useState(0);
 
