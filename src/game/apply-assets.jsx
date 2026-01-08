@@ -31,7 +31,7 @@ function useObstacleLogic(objectRef, data, laneRef, setGameOver, playerPositionR
                 const obstacleY = objectRef.current.position.y;
                 const yDistance = Math.abs(playerY-obstacleY);
 
-                if( xDistance < 1 && yDistance < 1){
+                if( xDistance < 2 && yDistance < 2){
                     if(data.id < 20){
                         setHearts(prevHearts=>{
                             const newHearts = prevHearts-1;

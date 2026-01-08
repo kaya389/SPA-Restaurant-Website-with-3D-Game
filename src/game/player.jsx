@@ -7,7 +7,7 @@ export function Player({laneRef, jumpTriggerRef, playerPositionRef}){
     const baseUrl = import.meta.env.BASE_URL;
     const meshRef = useRef();
 
-    const {scene} = useGLTF(`${baseUrl}cockatrice.glb`);
+    const {scene} = useGLTF(`${baseUrl}bon-little.glb`);
 
     const SMOOTHNESS = 8;
 
@@ -20,8 +20,8 @@ export function Player({laneRef, jumpTriggerRef, playerPositionRef}){
     const isAirborne = useRef(false);
     const yVelocity = useRef(0);
 
-    const JUMP_FORCE = 0.06;
-    const GRAVITY = 0.001;
+    const JUMP_FORCE = 0.2;
+    const GRAVITY = 0.009;
 
     //const targetX = (lane-1)*2;
     useFrame((state, delta)=>{
@@ -35,14 +35,9 @@ export function Player({laneRef, jumpTriggerRef, playerPositionRef}){
 
             if(time < 10){
                 gamePresentationRotation = Math.PI;
-                gamePresentationPosition = 4;
+                gamePresentationPosition = 3;
                 gamePresentationRotationX = -0.4;
-                jumpTriggerRef.current = false;
-                isAirborne.current = true;
                 targetMultiplier = 2;
-            }else{
-                jumpTriggerRef.current = true;
-                isAirborne.current = false;
             }
 
             meshRef.current.rotation.y = THREE.MathUtils.lerp(
@@ -70,7 +65,7 @@ export function Player({laneRef, jumpTriggerRef, playerPositionRef}){
             meshRef.current.scale.y = THREE.MathUtils.lerp(
                 meshRef.current.scale.y,
                 BASE_SCALE_Y * targetMultiplier,
-                2 * delta
+                2  * delta
             );
             meshRef.current.scale.z = THREE.MathUtils.lerp(
                 meshRef.current.scale.z,
@@ -81,7 +76,7 @@ export function Player({laneRef, jumpTriggerRef, playerPositionRef}){
 
             //const smoothness = 5;
 
-            if (jumpTriggerRef.current && !isAirborne.current) {
+            if (jumpTriggerRef.current) {
                 isAirborne.current = true;
                 yVelocity.current = JUMP_FORCE; // Yukarı hız ver
                 jumpTriggerRef.current = false; // Emri sıfırla
@@ -141,7 +136,7 @@ export function Player({laneRef, jumpTriggerRef, playerPositionRef}){
             <primitive
                 object={scene}
                 rotation={[0, Math.PI, 0]}
-                position-y={0.4}
+                position-y={-0.2}
                 position-z = {0}
             />
         </mesh>
