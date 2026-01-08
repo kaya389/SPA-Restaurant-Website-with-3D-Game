@@ -200,11 +200,13 @@ export function Game({isActive, handleExitGame}){
     }
 
     useEffect(() => {
+        if(!showImage)return;
+
         const timer = setTimeout(() => {
             setShowImage(false)
-        }, 10000);
+        }, 20000);
         return () => clearTimeout(timer);
-    }, []);
+    }, [showImage]);
 
     useEffect(()=>{
         if(hearts<=0 && !gameOver){
@@ -278,33 +280,30 @@ export function Game({isActive, handleExitGame}){
             }}>
                 <button
                     style={{height: '100px', width: '100px'}}
-                    onTouchStart={(e)=>{
+                    onPointerDown={(e)=>{
                         e.preventDefault();
                         inputRef.current = 'ArrowLeft';
                     }}
-                    onMouseDown={() => inputRef.current = 'ArrowLeft'}
                 >
                     &#8592;
                 </button>
 
                 <button
                     style={{height: '100px', width: '100px'}}
-                    onTouchStart={(e)=>{
+                    onPointerDown={(e)=>{
                         e.preventDefault();
                         inputRef.current = 'Space';
                     }}
-                    onMouseDown={() => inputRef.current = 'Space'}
                 >
                     &#8593;
                 </button>
 
                 <button
                     style={{height: '100px', width: '100px'}}
-                    onTouchStart={(e)=>{
+                    onPointerDown={(e)=>{
                         e.preventDefault();
                         inputRef.current = 'ArrowRight';;
                     }}
-                    onMouseDown={() => inputRef.current = 'ArrowRight'}
                 >
                     &#8594;
                 </button>
@@ -321,7 +320,11 @@ export function Game({isActive, handleExitGame}){
             {showImage && (
                 <img src={dialogBox}
                 style={{
-                    position: 'absolute', top: '0px', height: '200px', right: '90px', zIndex: 2000
+                    position: 'absolute', 
+                    top: '0px', 
+                    height: '300px', 
+                    left: '0px', 
+                    zIndex: 99999
                 }}
                 />
             )}

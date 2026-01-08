@@ -1,5 +1,5 @@
 import {useRef, useEffect} from 'react';
-import {useFBX, useTexture} from '@react-three/drei';
+import {useGLTF, OrbitControls} from '@react-three/drei';
 import {useFrame} from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -7,16 +7,15 @@ export function Player({laneRef, jumpTriggerRef, playerPositionRef}){
     const baseUrl = import.meta.env.BASE_URL;
     const meshRef = useRef();
 
-    const fbx = useFBX(`${baseUrl}cockatrice.fbx`);
-    const texture = useTexture(`${baseUrl}Material_BaseColor.png`);
+    const {scene} = useGLTF(`${baseUrl}cockatrice.glb`);
 
     const SMOOTHNESS = 8;
 
     const GROUND_LEVEL = 0.5;
 
-    const BASE_SCALE_X = 0.018;
-    const BASE_SCALE_Y = 0.010;
-    const BASE_SCALE_Z = 0.018;
+    const BASE_SCALE_X = 1;
+    const BASE_SCALE_Y = 1;
+    const BASE_SCALE_Z = 1;
 
     const isAirborne = useRef(false);
     const yVelocity = useRef(0);
@@ -37,14 +36,13 @@ export function Player({laneRef, jumpTriggerRef, playerPositionRef}){
             if(time < 10){
                 gamePresentationRotation = Math.PI;
                 gamePresentationPosition = 4;
-                gamePresentationRotationX = -0.4
-                setTimeout(()=>{
-                    jumpTriggerRef.current = true;
-                    isAirborne.current = false;
-                }, 1000);
+                gamePresentationRotationX = -0.4;
                 jumpTriggerRef.current = false;
                 isAirborne.current = true;
                 targetMultiplier = 2;
+            }else{
+                jumpTriggerRef.current = true;
+                isAirborne.current = false;
             }
 
             meshRef.current.rotation.y = THREE.MathUtils.lerp(
@@ -138,31 +136,12 @@ export function Player({laneRef, jumpTriggerRef, playerPositionRef}){
         }
     });
 
-    useEffect(() => {
-        fbx.traverse((child) => {
-        if (child.isMesh) {
-            // Modele "Senin rengin bu resimdir" diyoruz
-            child.material.map = texture;
-            
-            // Renkler soluk çıkmasın diye
-            child.material.color = new THREE.Color(1, 1, 1); 
-            
-            // Gölge ayarları
-            child.castShadow = true;
-            child.receiveShadow = true;
-            
-            // Güncellemeyi onayla
-            child.material.needsUpdate = true;
-        }
-        });
-    }, [fbx, texture]);
-
     return(
         <mesh ref={meshRef} position={[0, 1, 0]}>
             <primitive
-                object={fbx}
+                object={scene}
                 rotation={[0, Math.PI, 0]}
-                position-y={1}
+                position-y={0.4}
                 position-z = {0}
             />
         </mesh>

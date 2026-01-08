@@ -1,30 +1,16 @@
 import React, { useRef, useMemo, Suspense, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { useFBX, useTexture } from '@react-three/drei';
+import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import { SkeletonUtils } from 'three-stdlib';
 
-function SingleBird({ source, texturePath, scale, speed, offset }) {
+function SingleBird({ source, scale, speed, offset }) {
     const meshRef = useRef();
-    const fbx = useFBX(source);
-    const texture = useTexture(texturePath);
+    const {scene} = useGLTF(source);
+
+    const clone = useMemo(() => SkeletonUtils.clone(scene), [scene]);
 
     const mouseRef = useRef({x: 0, y: 0});
-
-    const clone = useMemo(() => {
-        const c = SkeletonUtils.clone(fbx);
-        c.traverse((child) => {
-            if (child.isMesh) {
-                child.material = new THREE.MeshStandardMaterial({
-                    map: texture,
-                    color: new THREE.Color(1, 1, 1),
-                });
-                child.castShadow = true;
-                child.receiveShadow = true;
-            }
-        });
-        return c;
-    }, [fbx, texture]);
 
     useEffect(()=>{
         meshRef.current.position.x = offset.x;
@@ -82,10 +68,8 @@ function SingleBird({ source, texturePath, scale, speed, offset }) {
 
 export function TwoBirds() {
     const baseUrl = import.meta.env.BASE_URL;
-    const cockatriceSource = `${baseUrl}cockatrice.fbx`;
-    const littleBonSource = `${baseUrl}bon-little.fbx`;
-    const cockatriceTexture = `${baseUrl}Material_BaseColor.png`;
-    const littleBonTexture = `${baseUrl}bon-little_texture.png`;
+    const cockatriceSource = `${baseUrl}cockatrice.glb`;
+    const littleBonSource = `${baseUrl}bon-little.glb`;
     return (
         <Canvas
             style={{ 
@@ -101,16 +85,14 @@ export function TwoBirds() {
             <Suspense fallback={null}>
                 <SingleBird 
                     source= {cockatriceSource}
-                    texturePath= {cockatriceTexture}
-                    scale={[0.01, 0.01, 0.01]} 
+                    scale={[1, 1, 1]} 
                     speed={0.005} 
                     offset={{ x: -1.4, y:  1.7}}
                 />
 
                 <SingleBird 
-                    source={littleBonSource} 
-                    texturePath= {littleBonTexture}
-                    scale={[0.006, 0.006, 0.006]} 
+                    source={littleBonSource}
+                    scale={[0.7, 0.7, 0.7]} 
                     speed={0.009}
                     offset={{ x: -0.6, y: 2}}
                 />

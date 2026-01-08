@@ -1,16 +1,15 @@
-import {useFBX, useTexture} from '@react-three/drei';
+import { useGLTF} from '@react-three/drei';
 import { useEffect } from 'react';
 import { assetPool } from './asset-pool';
 
-function PreloadAsset({source, texture}){
-    const fbx = useFBX(source);
-    const tex = useTexture(texture);
+function PreloadAsset({source}){
+    const {scene} = useGLTF(source);
     
     useEffect(()=>{
         if(!assetPool.pools[source]){
-            assetPool.preparePool(source, fbx, tex, 1);
+            assetPool.preparePool(source, scene);
         }
-    }, [source, fbx, tex]);
+    }, [source, scene]);
 
     return null;
 }
@@ -27,8 +26,7 @@ export function AssetLoader({rivals, onReady}){
             {rivals.map((r) => (
                 <PreloadAsset 
                     key={r.id}
-                    source={r.source} 
-                    texture={r.texture} 
+                    source={r.source}
                 />
             ))}
         </>

@@ -17,21 +17,10 @@ class AssetPool{
         return this.materials[key];
     }
 
-    preparePool(source, fbx, texture){
+    preparePool(source, clone){
         if(this.pools[source]) return;
 
         this.pools[source] = [];
-        const material = this.getMaterial(texture);
-
-        const clone = SkeletonUtils.clone(fbx);
-
-        clone.traverse((child) => {
-            if (child.isMesh) {
-                child.material = material;
-                child.castShadow = true;
-                child.receiveShadow = true;
-            }
-        });
 
         clone.userData = {
             inUse: false,
