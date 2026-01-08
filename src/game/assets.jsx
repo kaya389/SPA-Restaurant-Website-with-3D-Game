@@ -158,10 +158,10 @@ export const fbxElements = [
     },
     {   
         id: 22,
-        rotation: [2, 0, 4.3],
-        scale: [0.064, 0.128, 0.128],
-        position: [0, -1, -100],
-        source: `${baseUrl}model.glb`,
+        rotation: [0, 0, 0],
+        scale: [5, 5, 5],
+        position: [0, 1, -100],
+        source: `${baseUrl}a_realistic_tiger__0118134023_texture.glb`,
     },
     {
         id: 23,
@@ -179,9 +179,9 @@ export const fbxElements = [
     },
     {
         id: 25,
-        rotation: [2, 0, 4.3],
-        scale: [0.064, 0.128, 0.128],
-        position: [0, -3, -10],
-        source: `${baseUrl}model.glb`,
+        rotation: [0, 0, 0],
+        scale: [5, 5, 5],
+        position: [0, 1, -100],
+        source: `${baseUrl}a_realistic_tiger__0118134023_texture.glb`,
     }
 ];

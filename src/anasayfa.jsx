@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
 
-import dukkan from '../images/dukkan.png'
-import kaldirim from '../images/kaldırım-back.png'
+import dukkan from '../images/dukkan.png';
 import playButton from '../images/play-button.png';
 import intro from '../images/game-start-scene.mp4';
 import lamba from '../images/lamba.png'
-import e_poster1 from '../images/e_poster.png';
-import e_poster2 from '../images/e_poster2.png';
-import e_poster3 from '../images/e_poster3.png';
-import e_poster4 from '../images/e_poster4.png';
-import e_poster5 from '../images/e_poster2.png';
+import e_poster1 from '../images/e_poster.jpg';
+import e_poster2 from '../images/e_poster2.jpg';
+import e_poster3 from '../images/e_poster3.jpg';
+import e_poster4 from '../images/e_poster4.jpg';
+import e_poster5 from '../images/e_poster2.jpg';
 import koltuk from '../images/koltuk.png';
 import qr_platform from '../images/qr-platform.png';
 import beni_oku from '../images/beni-oku.png';
@@ -171,7 +170,6 @@ export function AnaSayfa({gameModActive, setGameModActive,
                 <button className='cik'
                     onClick={()=>{
                         setBeniOku(false);
-                        console.log('a');
                     }}
                 >
                     ❌
