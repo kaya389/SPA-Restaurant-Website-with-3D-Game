@@ -15,9 +15,10 @@ function PreloadAsset({source}){
 }
 export function AssetLoader({rivals, onReady}){
     useEffect(() => {
-        if(Object.keys(assetPool.pools).length === rivals.length){
-            onReady();
-        }
+        const timer = setTimeout(() => {
+            onReady(); // Oyunu başlat
+        }, 2000); // 2 saniye yükleme payı ver
+        return () => clearTimeout(timer);
     }, [onReady]);
 
     return (

@@ -31,17 +31,13 @@ useGLTF.preload(`${baseUrl}cockatrice.glb`);
 function GameContent({ setGameOver, setCanDie, setHearts, inputRef}) {
     const laneRef = useRef(1);
     const jumpTriggerRef = useRef(false);
+    const canMove = useRef(true);
     const playerPositionRef = useRef(new THREE.Vector3());
 
-    const canMove = useRef(0);
-
-    useFrame((state, delta)=>{
-        if(canMove.current>0){
-            canMove.current -=delta;
-        }
-        if(inputRef.current && canMove.current){
+    useFrame(()=>{
+        if(inputRef.current){
             let changed = false;
-
+            if (!canMove.current) return;
             if (inputRef.current === 'Space') {
                 jumpTriggerRef.current = true;
             }
@@ -55,11 +51,14 @@ function GameContent({ setGameOver, setCanDie, setHearts, inputRef}) {
         
             inputRef.current = null;
             if (changed) {
-                canMove.current = 0.1;
+                canMove.current = false;
+                setTimeout(() => { canMove.current = true; }, 100);
             }
         }
     })
     useEffect(() => {
+        let changed = false;
+        
         const deathTimer = setTimeout(() => {
             setCanDie(true);
         }, 15000);
@@ -68,12 +67,17 @@ function GameContent({ setGameOver, setCanDie, setHearts, inputRef}) {
             if (!canMove.current) return;
 
             if (e.code === 'Space' || e.key === 'ArrowUp') {
-                inputRef.current = 'Space';
+                jumpTriggerRef.current = true;
             }
             if ((e.key === 'ArrowLeft') && laneRef.current > 0) {
-                inputRef.current = 'ArrowLeft';
+                laneRef.current -= 1; changed = true;
             } else if ((e.key === 'ArrowRight') && laneRef.current < 2) {
-                inputRef.current = 'ArrowRight';
+                laneRef.current += 1; changed = true;
+            }
+
+            if (changed) {
+                canMove.current = false;
+                setTimeout(() => { canMove.current = true; }, 100);
             }
         };
         window.addEventListener('keydown', handleKeyDown);
@@ -86,7 +90,7 @@ function GameContent({ setGameOver, setCanDie, setHearts, inputRef}) {
     useEffect(()=>{
         return () => {
             jumpTriggerRef.current = false;
-            canMove.current = 0;
+            canMove.current = true;
         };
     }, []);
     
