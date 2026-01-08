@@ -102,7 +102,12 @@ function GameContent({ setGameOver, setCanDie, setHearts, inputRef}) {
                 jumpTriggerRef={jumpTriggerRef}
                 playerPositionRef={playerPositionRef}
             />
-            <Ground />
+            {/*<Ground />*/}
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
+                <planeGeometry args={[10, 100, 100, 100]} />
+                <meshStandardMaterial color="#f4a460" />
+            </mesh>
+            <gridHelper args={[100, 50, "red", "gray"]} position={[0, 0, 0]} />
             <RivalManager 
                 laneRef={laneRef} 
                 setGameOver={setGameOver} 
@@ -366,8 +371,7 @@ export function Game({isActive, handleExitGame}){
                     <ambientLight intensity={1}/>
                     <directionalLight position={[10, 10, 5]} intensity={1.5}/>
                     <Environment
-                        files={cityUrl}
-                        background
+                        preset="city"
                     />
 
                     <fog attach="fog" args={['#333', 10, 50]} />
