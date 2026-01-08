@@ -72,6 +72,13 @@ export function TwoBirds() {
     const littleBonSource = `${baseUrl}bon-little.glb`;
     return (
         <Canvas
+            dpr={[1, 1.5]}
+            gl={{
+                powerPreference: "high-performance",
+                antialias: false,
+                stencil: false,
+                depth: true
+            }}
             style={{ 
                 position: 'fixed', top: 0, left: 0, 
                 width: '100%', height: '100%', 

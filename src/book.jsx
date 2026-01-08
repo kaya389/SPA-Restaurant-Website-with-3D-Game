@@ -10,9 +10,19 @@ const TypewriterText = React.memo(({text, speed=30, onTypingStart, onTypingEnd})
     const containerRef = useRef(null);
     const [isVisible, setIsVisible] = useState(false);
 
-    const audioRef = useRef(new Audio(`${baseUrl}typewriter.mp3`));
+    const audioPool = useRef([]);
 
     const hasStartedRef = useRef(false);
+
+    useEffect(() => {
+        if (audioPool.current.length === 0) {
+            for (let i = 0; i < 5; i++) {
+                const audio = new Audio(`${baseUrl}typewriter.mp3`);
+                audio.volume = 0.5;
+                audioPool.current.push(audio);
+            }
+        }
+    }, [baseUrl]);
 
     useEffect(()=>{
         const observer = new IntersectionObserver(
@@ -35,40 +45,19 @@ const TypewriterText = React.memo(({text, speed=30, onTypingStart, onTypingEnd})
         let intervalId;
         let timeoutId;
 
-        const unlockAudio = () => {
-            if(audioRef.current){
-                audioRef.current.play().then(()=>{
-                    audioRef.current.pause();
-                    audioRef.current.currentTime = 0;
-                }).catch(()=>{});
-            }
-            window.removeEventListener('click', unlockAudio);
-            window.removeEventListener('keydown', unlockAudio);
-            window.removeEventListener('touchstart', unlockAudio);
-        }
-
         const playSound = ()=>{
-            if(!audioRef.current) return;
-        
-            audioRef.current.currentTime = 0;
+            const availableAudio = audioPool.current.find(a => a.paused);
 
-            const playPromise = audioRef.current.play();
-
-            if(playPromise !== undefined){
-                playPromise.catch(error=>{
-                    window.addEventListener('click', unlockAudio);
-                    window.addEventListener('keydown', unlockAudio);
-                    window.addEventListener('touchstart', unlockAudio);
-                })
+            if (availableAudio) {
+                availableAudio.currentTime = 0;
+                availableAudio.play().catch(() => {}); 
+            } else {
+                const fallbackAudio = audioPool.current[0];
+                if(fallbackAudio) {
+                    fallbackAudio.currentTime = 0;
+                    fallbackAudio.play().catch(() => {});
+                }
             }
-
-            audioRef.current.play()
-                .then(()=>{
-                    window.removeEventListener('click', playSound);
-                    window.removeEventListener('keydown', playSound);
-                    window.removeEventListener('touchstart', playSound);
-                })
-        
         };
 
         if(isVisible){
@@ -106,9 +95,6 @@ const TypewriterText = React.memo(({text, speed=30, onTypingStart, onTypingEnd})
         return ()=>{
             clearTimeout(timeoutId);
             clearInterval(intervalId);
-            window.removeEventListener('click', unlockAudio);
-            window.removeEventListener('keydown', unlockAudio);
-            window.removeEventListener('touchstart', unlockAudio);
         }
     }, [isVisible, text, speed]);
 

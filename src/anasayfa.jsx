@@ -115,6 +115,8 @@ export function AnaSayfa({gameModActive, setGameModActive,
                     {gameStart?(
                     <div className='video-and-buttons'>
                         <video
+                            preload='metadata'
+                            playsInline
                             className='game-start-scene'
                             src={intro}
                             autoPlay

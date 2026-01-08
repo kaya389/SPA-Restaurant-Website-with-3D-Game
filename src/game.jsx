@@ -1,11 +1,11 @@
 import React, {useEffect, useRef, Suspense, useState} from 'react';
 
 import {Canvas, useFrame} from '@react-three/fiber';
-import {useFBX, Environment} from '@react-three/drei';
+import {useGLTF, Environment} from '@react-three/drei';
 import * as THREE from 'three';
 
 import {Player} from './game/player.jsx';
-import {Ground} from './game/ground.jsx';
+
 import {AssetElement} from './game/apply-assets.jsx';
 
 import dialogBox from '../images/dialog-box.png';
@@ -22,23 +22,26 @@ rivals.forEach((element, index)=>{
 });
 
 toPreload.forEach((path)=>{
-    useFBX.preload(path);
+    useGLTF.preload(path);
 });
 
 const baseUrl = import.meta.env.BASE_URL;
-const cityUrl = `${baseUrl}city.exr`;
-useFBX.preload(`${baseUrl}cockatrice.fbx`);
+useGLTF.preload(`${baseUrl}cockatrice.glb`);
 
 function GameContent({ setGameOver, setCanDie, setHearts, inputRef}) {
     const laneRef = useRef(1);
     const jumpTriggerRef = useRef(false);
-    const canMove = useRef(true);
     const playerPositionRef = useRef(new THREE.Vector3());
 
-    useFrame(()=>{
-        if(inputRef.current){
+    const canMove = useRef(0);
+
+    useFrame((state, delta)=>{
+        if(canMove.current>0){
+            canMove.current -=delta;
+        }
+        if(inputRef.current && canMove.current){
             let changed = false;
-            if (!canMove.current) return;
+
             if (inputRef.current === 'Space') {
                 jumpTriggerRef.current = true;
             }
@@ -52,14 +55,11 @@ function GameContent({ setGameOver, setCanDie, setHearts, inputRef}) {
         
             inputRef.current = null;
             if (changed) {
-                canMove.current = false;
-                setTimeout(() => { canMove.current = true; }, 100);
+                canMove.current = 0.1;
             }
         }
     })
     useEffect(() => {
-        let changed = false;
-        
         const deathTimer = setTimeout(() => {
             setCanDie(true);
         }, 15000);
@@ -68,17 +68,12 @@ function GameContent({ setGameOver, setCanDie, setHearts, inputRef}) {
             if (!canMove.current) return;
 
             if (e.code === 'Space' || e.key === 'ArrowUp') {
-                jumpTriggerRef.current = true;
+                inputRef.current = 'Space';
             }
             if ((e.key === 'ArrowLeft') && laneRef.current > 0) {
-                laneRef.current -= 1; changed = true;
+                inputRef.current = 'ArrowLeft';
             } else if ((e.key === 'ArrowRight') && laneRef.current < 2) {
-                laneRef.current += 1; changed = true;
-            }
-
-            if (changed) {
-                canMove.current = false;
-                setTimeout(() => { canMove.current = true; }, 100);
+                inputRef.current = 'ArrowRight';
             }
         };
         window.addEventListener('keydown', handleKeyDown);
@@ -91,7 +86,7 @@ function GameContent({ setGameOver, setCanDie, setHearts, inputRef}) {
     useEffect(()=>{
         return () => {
             jumpTriggerRef.current = false;
-            canMove.current = true;
+            canMove.current = 0;
         };
     }, []);
     
@@ -369,12 +364,13 @@ export function Game({isActive, handleExitGame}){
             }}>
                 <Canvas frameloop = "always" camera = {{position: [0, 3, 5], fov:60}}>
                     <ambientLight intensity={1}/>
-                    <directionalLight position={[10, 10, 5]} intensity={1.5}/>
-                    <Environment
-                        preset="city"
+                    <directionalLight 
+                        position={[10, 10, 5]} 
+                        intensity={1.5}
+                        castShadow={false}
                     />
 
-                    <fog attach="fog" args={['#333', 10, 50]} />
+                    <fog attach="fog" args={['#333', 15, 35]} />
                     
 
                     <Suspense fallback={null}>

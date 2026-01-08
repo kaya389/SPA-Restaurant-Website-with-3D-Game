@@ -4,17 +4,6 @@ import { SkeletonUtils } from 'three/examples/jsm/Addons.js';
 class AssetPool{
     constructor(){
         this.pools = {};
-        this.materials = {};
-    }
-
-    getMaterial(texture){
-        const key = texture.uuid;
-        if(!this.materials[key]){
-            this.materials[key] = new THREE.MeshStandardMaterial({
-                map: texture
-            });
-        }
-        return this.materials[key];
     }
 
     preparePool(source, clone){

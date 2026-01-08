@@ -110,6 +110,8 @@ export function Menu({setVideoEnded, videoEnded}){
                 {!videoEnded ? 
                     (
                         <video
+                            preload="metadata"
+                            playsInline
                             className='menu-start-scene'
                             src={menu_start}
                             autoPlay
