@@ -4,7 +4,7 @@ import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import { SkeletonUtils } from 'three-stdlib';
 
-function SingleBird({ source, scale, speed, offset }) {
+export function SingleBird({ source, scale, speed, offset }) {
     const meshRef = useRef();
     const {scene} = useGLTF(source);
 
