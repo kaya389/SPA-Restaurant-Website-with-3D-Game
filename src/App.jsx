@@ -12,11 +12,18 @@ import './App.css';
 
 function App() {
   const baseUrl = import.meta.env.BASE_URL;
+
   const [gameModActive, setGameModActive] = useState(false);
+  //state starts the game
   const [gameStart, setGameStart] = useState(false);
+  //state starts the before video of game
   const [positionChange, setPositionChange] = useState(false);
+  //state controls the before positions of dukkan image
   const [openButton, setOpenButton] = useState(false);
+  //state controls visibility of direct exit from game button
   const [videoEnded, setVideoEnded] = useState(false);
+  //state controls if menu animation can start after video
+
   const audioRef = useRef(null);
 
   const location = useLocation();
@@ -63,6 +70,7 @@ function App() {
         }
         return; 
       }
+
       if(!audioRef.current){
         audioRef.current = new Audio(`${baseUrl}cornered.mp3`);
         audioRef.current.loop = true;

@@ -1,6 +1,3 @@
-import * as THREE from 'three';
-import { SkeletonUtils } from 'three/examples/jsm/Addons.js';
-
 class AssetPool{
     constructor(){
         this.pools = {};
@@ -41,31 +38,28 @@ class AssetPool{
     }
     
     dispose(){
-        Object.values(this.pools).forEach(pool=>{
-            pool.forEach(obj=>{
-                obj.traverse((child)=>{
-                    if(child.geometry)child.geometry.dispose();
-                    if(child.material){
-                        if(Array.isArray(child.material)){
-                            child.material.forEach(m=>m.dispose);
-                        }else{
-                            child.material.dispose();
+        if(this.pools){
+            Object.values(this.pools).forEach(pool=>{
+                if(!pool) return;
+                pool.forEach(obj=>{
+                    obj.traverse((child)=>{
+                        if(child.geometry)child.geometry.dispose();
+                        if(child.material){
+                            if(Array.isArray(child.material)){
+                                child.material.forEach(m=>m.dispose);
+                            }else{
+                                child.material.dispose();
+                            }
                         }
-                    }
+                    });
                 });
             });
-        });
-        Object.values(this.materials).forEach(mat=>{
-            if(mat.map) mat.map.dispose();
-            mat.dispose();
-        })
+        }
 
         this.pools = {};
-        this.materials = {};
     }
     reset() {
         this.pools = {};
-        this.materials = {};
     }
 }
 

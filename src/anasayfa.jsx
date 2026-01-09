@@ -108,8 +108,8 @@ export function AnaSayfa({gameModActive, setGameModActive,
                                 className='play-button' 
                                 src={playButton}
                                 style={{pointerEvents: 'none'}}
-                                >
-                            </img>
+                                alt="start the game img"
+                            />
                         </button>
                     </div>
                     {gameStart?(
